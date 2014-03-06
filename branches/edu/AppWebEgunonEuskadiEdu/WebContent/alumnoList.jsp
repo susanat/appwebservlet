@@ -24,7 +24,10 @@
 	      <th scope="col">Nombre</th>
 	      <th scope="col">Apellido</th>
 	      <th scope="col">Dni</th>
-	      <th scope="col">Operaciones</th>
+	      <th scope="col">Edad</th>
+	      <th scope="col">Sexo</th>
+	      <th scope="col">Email</th>
+	      
 	    </tr>
 	  </thead>
 	  <tbody>
@@ -39,8 +42,12 @@
 			     	 <td><%=a.getNombre()%></td>
 			    	  <td><%=a.getApellido()%></td>
 			    	  <td><%=a.getDni()%></td>
+			    	  <td><%=a.getEdad()%></td>
+			    	  <td><%=a.getSexo()%></td>
+			    	  <td><%=a.getEmail()%></td>
+			    	  
 			    	  <td><a href="alumno?id=<%=a.getId()%>">detalle</a></td>
-			    </tr>   
+			       </tr>   
 				<%
 			
 			}

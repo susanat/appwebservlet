@@ -73,12 +73,17 @@ public class AlumnoServlet extends ServletMaestro {
 		if ( null != idAlumno ){
 			//detalle
 			log.trace("Detalle alumno" + idAlumno);
-			dispatcher = request.getRequestDispatcher("alumnoDetalle.jsp");
 			
-			//TODO conectar BBDD obtener Alumnos	
-			String alumno = "Alumno detalle";
+			
+			//TODO conectar BBDD obtener Alumnos
+			
+			
 			//enviar datos en la request a la JSP
+			ModeloAlumno modelAlumno= new ModeloAlumno();
+			int id=idAlumno.indexOf(idAlumno);
+			Alumno alumno=modelAlumno.getAlumnoById(id);
 			request.setAttribute("detalleAlumno", alumno );
+			dispatcher = request.getRequestDispatcher("alumnoDetalle.jsp");
 			
 		}else{
 			//listando

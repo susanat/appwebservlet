@@ -34,7 +34,7 @@
 <label name="recuerdame">Recordar usuario:</label>
 
 <c:if test="${!empty cookie['cName']}" >
-  <input type="checkbox" name="recuerdame" checked />
+  <input type="checkbox" name="recuerdame" checked="checked" />
 </c:if>
 
 <c:if test="${empty cookie['cName']}"> 
