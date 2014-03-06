@@ -31,7 +31,7 @@ public class AlumnoServlet extends ServletMaestro {
 	 */
 	public AlumnoServlet() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	@Override
@@ -85,7 +85,11 @@ public class AlumnoServlet extends ServletMaestro {
 			log.trace("Listado alumnos");
 			dispatcher = request.getRequestDispatcher("alumnoList.jsp");
 			
-			//TODO conectar BBDD obtener Alumnos		
+			//TODO conectar BBDD obtener Alumnos	
+			ModeloAlumno modelAlumno= new ModeloAlumno();
+			ArrayList<Alumno>listaAlumnos=modelAlumno.getAll();
+			
+			
 			ArrayList <String> lAlumnos = new ArrayList<String>();
 			for(int i=0;i<100;i++){
 				lAlumnos.add("Alumno" +i);
@@ -94,7 +98,7 @@ public class AlumnoServlet extends ServletMaestro {
 			
 			
 			//enviar datos en la request a la JSP
-			request.setAttribute("listaAlumnos", lAlumnos );
+			request.setAttribute("listaAlumnos", listaAlumnos );
 			
 		}
 		
