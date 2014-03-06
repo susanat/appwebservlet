@@ -30,14 +30,16 @@
 	  <tbody>
 	   
 	  	<%
-			ArrayList <String> lAlumnos = (ArrayList<String>) request.getAttribute("listaAlumnos");		
+			ArrayList <Alumno> lAlumnos = (ArrayList<Alumno>) request.getAttribute("listaAlumnos");	
+	  	    Alumno a;
 			for ( int i=0; i<lAlumnos.size();i++){
+				a=lAlumnos.get(i);
 				%>
 				  <tr>
-			     	 <td><%=lAlumnos.get(i)%></td>
-			    	  <td>Garibolo</td>
-			   	 	  <td>022741254</td>
-			   	 	  <td><a href="alumno?id=<%=i%>">detalle</a></td>
+			     	 <td><%=a.getNombre()%></td>
+			    	  <td><%=a.getApellido()%></td>
+			    	  <td><%=a.getDni()%></td>
+			    	  <td><a href="alumno?id=<%=a.getId()%>">detalle</a></td>
 			    </tr>   
 				<%
 			
