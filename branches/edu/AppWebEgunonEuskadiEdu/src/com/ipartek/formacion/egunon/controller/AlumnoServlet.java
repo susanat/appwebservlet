@@ -80,7 +80,7 @@ public class AlumnoServlet extends ServletMaestro {
 			
 			//enviar datos en la request a la JSP
 			ModeloAlumno modelAlumno= new ModeloAlumno();
-			int id=idAlumno.indexOf(idAlumno);
+			int id=Integer.parseInt(idAlumno);
 			Alumno alumno=modelAlumno.getAlumnoById(id);
 			request.setAttribute("detalleAlumno", alumno );
 			dispatcher = request.getRequestDispatcher("alumnoDetalle.jsp");
@@ -118,7 +118,8 @@ public class AlumnoServlet extends ServletMaestro {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
+		//doGet(request, response);
+		
 	}
 
 }

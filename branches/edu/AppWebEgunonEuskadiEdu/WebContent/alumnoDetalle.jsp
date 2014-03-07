@@ -10,24 +10,26 @@
 <body>
 <h1>Detalle Alumno</h1>
 <%Alumno a=(Alumno)request.getAttribute("detalleAlumno"); %>
+
+
 <form action="alumno" method="post">
     <label name="id">ID</label>
-    <input type="text" name="id" disabled value="<%a.getId();%>"><br/>
+    <input type="text" name="id" disabled value="<%=a.getId()%>"><br/>
     
-    <label name="name">Nombre</label>
-    <input type="text" name="name" value="<%a.getNombre();%>"><br/>
+    <label name="ename">Nombre</label>
+    <input type="text" name="name" value="<%=a.getNombre()%>"><br/>
     
-    <label name="apellido">Apellido</label>
-    <input type="text" name="apellido" value="<%a.getApellido();%>"><br/>
+    <label name="eapellido">Apellido</label>
+    <input type="text" name="apellido" value="<%=a.getApellido()%>"><br/>
     
-    <label name="edad">Edad</label>
-    <input type="text" name="edad" value="<%a.getEdad();%>"><br/>
+    <label name="eedad">Edad</label>
+    <input type="text" name="edad" value="<%=a.getEdad()%>"><br/>
     
-    <label name="sexo">Sexo</label>
-    <input type="text" name="sexo" value="<%a.getSexo();%>"><br/>
+    <label name="esexo">Sexo</label>
+    <input type="text" name="sexo" value="<%=a.getSexo()%>"><br/>
     
-     <label name="email">Email</label>
-    <input type="text" name="email" value="<%a.getEmail();%>"><br/>
+     <label name="eemail">Email</label>
+    <input type="text" name="email" value="<%=a.getEmail()%>"><br/>
     
     <input type="submit" name="update" value="Modificar">
     <input type="submit" name="delete" value="Borrar">
