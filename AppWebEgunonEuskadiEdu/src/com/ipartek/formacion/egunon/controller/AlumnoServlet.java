@@ -13,10 +13,14 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import com.ipartek.formacion.egunon.bean.Mensaje;
+import com.ipartek.formacion.egunon.bean.Mensaje.TIPO_MENSAJE;
 import com.ipartek.formacion.egunon.bean.UserLogin;
 import com.ipartek.pruebas.bbdd.ConnectionFactory;
 import com.ipartek.pruebas.bbdd.model.ModeloAlumno;
 import com.ipartek.pruebas.bean.Alumno;
+import com.ipartek.pruebas.exception.AlumnoException;
+import com.ipartek.pruebas.exception.LibroException;
 
 /**
  * Servlet implementation class AlumnoServlet
@@ -25,6 +29,8 @@ public class AlumnoServlet extends ServletMaestro {
 	
 	private static final long serialVersionUID = 1L;
 	private final static Logger log=Logger.getLogger(AlumnoServlet.class);
+	private RequestDispatcher dispatcher;
+	
     HttpSession session;
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -118,7 +124,58 @@ public class AlumnoServlet extends ServletMaestro {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//doGet(request, response);
+		//Insertar Alumno
+		String nombre=request.getParameter("name");
+		String apellido=request.getParameter("apellido");
+		String edad=request.getParameter("edad");
+		String dni=request.getParameter("dni");
+		int e=Integer.parseInt(edad);
+		String email=request.getParameter("email");
+		Alumno a;
+		Mensaje msg=null;
+		try {
+			a = new Alumno();
+			a.setNombre(nombre);
+			a.setApellido(apellido);
+			a.setDni(dni);
+		    a.setEmail(email);
+		    a.setEdad(e);
+		    ModeloAlumno model=new ModeloAlumno();
+		    if (model.insert(a)){
+		    	msg=new Mensaje("Usuario Creado",703,TIPO_MENSAJE.INFO);
+			    request.setAttribute("msg", msg);
+		    }
+		    	
+		    
+		    
+		    
+		} catch (AlumnoException e1) {
+			log.error("Error al introducir el alumno");
+			msg=new Mensaje("Usuario No valido",999,TIPO_MENSAJE.INFO);
+		    
+		    
+			
+		} catch (LibroException e1) {
+			
+			
+		}
+		finally{
+			request.setAttribute("msg", msg);
+			dispatcher= request.getRequestDispatcher("alumnoDetalle.jsp");
+			dispatcher.forward(request, response);
+			
+		}
+		
+			
+			
+			
+		
+		
+		
+		
+		
+		
+		
 		
 	}
 

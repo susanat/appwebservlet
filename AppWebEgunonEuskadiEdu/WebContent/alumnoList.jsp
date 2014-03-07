@@ -4,7 +4,7 @@
     <%@page import="com.ipartek.pruebas.bean.Alumno"%>
     <%@page import="java.util.ArrayList"%>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE >
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -15,7 +15,11 @@
 <link rel="stylesheet" href="js/css/jquery.dataTables.css">
 </head>
 <body>
-<h1>Listado de todos los Alumnos</h1>
+<h1>Listado de todos los Alumnos</h1><br/><br/>
+
+  <a href="detalleAlumno.jsp">Crear Alumno</a>
+    
+    
 
 	<table summary="Análisis de ventas anuales" id="tabla_alumno">
 	  <caption>Cabecera o Caption</caption>

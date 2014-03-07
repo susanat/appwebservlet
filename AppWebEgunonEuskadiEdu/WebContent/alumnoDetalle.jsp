@@ -8,11 +8,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>Detalle Alumno</h1>
+  <h1>    </h1>
 <%Alumno a=(Alumno)request.getAttribute("detalleAlumno"); %>
 
 
-<form action="alumno" method="post">
+<form action="alumno" method="get">
     <label name="id">ID</label>
     <input type="text" name="id" disabled value="<%=a.getId()%>"><br/>
     
@@ -22,18 +22,18 @@
     <label name="eapellido">Apellido</label>
     <input type="text" name="apellido" value="<%=a.getApellido()%>"><br/>
     
+    <label name="eapellido">Dni</label>
+    <input type="text" name="apellido" value="<%=a.getDni()%>"><br/>
+    
     <label name="eedad">Edad</label>
     <input type="text" name="edad" value="<%=a.getEdad()%>"><br/>
     
-    <label name="esexo">Sexo</label>
-    <input type="text" name="sexo" value="<%=a.getSexo()%>"><br/>
-    
-     <label name="eemail">Email</label>
+    <label name="eemail">Email</label>
     <input type="text" name="email" value="<%=a.getEmail()%>"><br/>
     
     <input type="submit" name="update" value="Modificar">
     <input type="submit" name="delete" value="Borrar">
-    <input type="submit" name="create" value="Crear">
+    
     
 
 
