@@ -82,12 +82,12 @@ public class AlumnoServlet extends ServletMaestro {
 			
 			
 			//TODO conectar BBDD obtener Alumnos
-			
-			
-			//enviar datos en la request a la JSP
 			ModeloAlumno modelAlumno= new ModeloAlumno();
 			int id=Integer.parseInt(idAlumno);
 			Alumno alumno=modelAlumno.getAlumnoById(id);
+			
+			//enviar datos en la request a la JSP
+			
 			request.setAttribute("detalleAlumno", alumno );
 			dispatcher = request.getRequestDispatcher("alumnoDetalle.jsp");
 			
@@ -141,9 +141,10 @@ public class AlumnoServlet extends ServletMaestro {
 		    a.setEmail(email);
 		    a.setEdad(e);
 		    ModeloAlumno model=new ModeloAlumno();
-		    if (model.insert(a)){
+		    if (model.insert(a)!=-1){
 		    	msg=new Mensaje("Usuario Creado",703,TIPO_MENSAJE.INFO);
 			    request.setAttribute("msg", msg);
+			    
 		    }
 		    	
 		    
