@@ -16,9 +16,9 @@
 </head>
 <body>
 <h1>Listado de todos los Alumnos</h1><br/><br/>
-
-  <a href="detalleAlumno.jsp">Crear Alumno</a>
-    
+   
+  <a href="alumnoDetalle.jsp">Crear Alumno</a>
+   
     
 
 	<table summary="Análisis de ventas anuales" id="tabla_alumno">
