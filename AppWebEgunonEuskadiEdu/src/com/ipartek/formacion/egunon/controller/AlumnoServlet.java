@@ -30,6 +30,12 @@ public class AlumnoServlet extends ServletMaestro {
 	private static final long serialVersionUID = 1L;
 	private final static Logger log=Logger.getLogger(AlumnoServlet.class);
 	private RequestDispatcher dispatcher;
+	public static final String OP_MODIFICAR_ALUMNO="modificar";
+	public static final String OP_BORRAR_ALUMNO="borrar";
+	public static final String OP_NUEVO_ALUMNO="nuevo";
+	public static final String OP_DETALLE_ALUMNO="detalle";
+	public static final String OP_LISTAR_ALUMNO="listar";
+	
 	
     HttpSession session;
 	/**
@@ -42,8 +48,10 @@ public class AlumnoServlet extends ServletMaestro {
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-		// TODO Auto-generated method stub
+		
 		super.init(config);
+		
+		
 		
 	}
 
@@ -76,13 +84,14 @@ public class AlumnoServlet extends ServletMaestro {
 		//comprobar si es para detalle o listar		
 		String idAlumno = request.getParameter("id");
 		
+		ModeloAlumno modelAlumno=new ModeloAlumno();
 		if ( null != idAlumno ){
 			//detalle
 			log.trace("Detalle alumno" + idAlumno);
 			
 			
 			//TODO conectar BBDD obtener Alumnos
-			ModeloAlumno modelAlumno= new ModeloAlumno();
+			
 			int id=Integer.parseInt(idAlumno);
 			Alumno alumno=modelAlumno.getAlumnoById(id);
 			
@@ -97,17 +106,8 @@ public class AlumnoServlet extends ServletMaestro {
 			dispatcher = request.getRequestDispatcher("alumnoList.jsp");
 			
 			//TODO conectar BBDD obtener Alumnos	
-			ModeloAlumno modelAlumno= new ModeloAlumno();
+			
 			ArrayList<Alumno>listaAlumnos=modelAlumno.getAll();
-			
-			
-			ArrayList <String> lAlumnos = new ArrayList<String>();
-			for(int i=0;i<100;i++){
-				lAlumnos.add("Alumno" +i);
-				
-			}
-			
-			
 			//enviar datos en la request a la JSP
 			request.setAttribute("listaAlumnos", listaAlumnos );
 			
@@ -115,7 +115,7 @@ public class AlumnoServlet extends ServletMaestro {
 		
 		//Redirecionar a la JSP
 		dispatcher.forward(request, response);
-	
+	    log.trace("dopost-Fin");
 	}
 
 	/**
@@ -124,7 +124,61 @@ public class AlumnoServlet extends ServletMaestro {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//Insertar Alumno
+		log.trace("dopost");
+		String operacion=request.getParameter("op");
+		if (OP_NUEVO_ALUMNO.equalsIgnoreCase(operacion)){
+			crearAlumno(request,response);
+		}else if (OP_MODIFICAR_ALUMNO.equalsIgnoreCase(operacion)){
+			modificarAlumno(request,response);
+		}
+		else if (OP_BORRAR_ALUMNO.equalsIgnoreCase(operacion)){
+			borrarAlumno(request,response);
+		}
+		
+		
+			
+		
+	}
+	
+	
+
+	private void borrarAlumno(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//Eliminar Alumno
+				String id=request.getParameter("id_oculto");
+				Mensaje msg=null;
+				try {
+					
+				    ModeloAlumno model=new ModeloAlumno();
+				    int id_oculto=Integer.parseInt(id);
+				    if (model.delete(id_oculto)){
+				    	log.info("Alumno eliminado" + id_oculto);
+				    	msg=new Mensaje("Usuario eliminado",703,TIPO_MENSAJE.INFO);
+					    request.setAttribute("msg", msg);
+					    
+					    
+				    }else{
+				    	log.error("No se ha podido eliminar el alumno" + id_oculto + ". Consultelo con el administrador del sistema" );
+				    	
+				    }
+				    		
+				} catch (Exception e2) {
+					log.error("Excepcion general");
+					msg=new Mensaje("Excepcion general" + e2.getMessage(),700,TIPO_MENSAJE.INFO);
+					
+				}
+				finally{
+					request.setAttribute("msg", msg);
+					dispatcher= request.getRequestDispatcher("alumnoDetalle.jsp");
+					doGet(request, response);
+					
+					
+				}
+				
+		
+	}
+
+	private void modificarAlumno(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//Modificar Alumno
 		String nombre=request.getParameter("name");
 		String apellido=request.getParameter("apellido");
 		String edad=request.getParameter("edad");
@@ -141,42 +195,89 @@ public class AlumnoServlet extends ServletMaestro {
 		    a.setEmail(email);
 		    a.setEdad(e);
 		    ModeloAlumno model=new ModeloAlumno();
-		    if (model.insert(a)!=-1){
-		    	msg=new Mensaje("Usuario Creado",703,TIPO_MENSAJE.INFO);
+		    String id=request.getParameter("id_oculto");
+		    int id_oculto=Integer.parseInt(id);
+		    if (model.update(a,id_oculto)){
+		    	log.info("Alumno modificado");
+		    	msg=new Mensaje("Usuario modificado",703,TIPO_MENSAJE.INFO);
 			    request.setAttribute("msg", msg);
+			    request.setAttribute("detalleAlumno", a);
 			    
+		    }else{
+		    	log.error("No se ha podido modificar el alumno" + id_oculto + "[" + a.toString() + "]. Consultelo con el administrador del sistema" );
+		    	
 		    }
 		    	
 		    
 		    
 		    
 		} catch (AlumnoException e1) {
-			log.error("Error al introducir el alumno");
-			msg=new Mensaje("Usuario No valido",999,TIPO_MENSAJE.INFO);
+			log.error("Error al modificar el alumno" + e1.getMensajeError());
+			msg=new Mensaje("Usuario No valido" + e1.getMensajeError(),e1.getCodigoError(),TIPO_MENSAJE.INFO);
 		    
 		    
 			
-		} catch (LibroException e1) {
-			
+		} catch (Exception e2) {
+ 			log.error("Excepcion general");
+			msg=new Mensaje("Excepcion general" + e2.getMessage(),700,TIPO_MENSAJE.INFO);
 			
 		}
 		finally{
 			request.setAttribute("msg", msg);
 			dispatcher= request.getRequestDispatcher("alumnoDetalle.jsp");
-			dispatcher.forward(request, response);
+			dispatcher.forward(request, response);	
 			
 		}
 		
-			
-			
-			
-		
-		
-		
-		
-		
-		
-		
+	}
+
+	private void crearAlumno(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//Insertar Alumno
+				String nombre=request.getParameter("name");
+				String apellido=request.getParameter("apellido");
+				String edad=request.getParameter("edad");
+				String dni=request.getParameter("dni");
+				int e=Integer.parseInt(edad);
+				String email=request.getParameter("email");
+				Alumno a;
+				Mensaje msg=null;
+				try {
+					a = new Alumno();
+					a.setNombre(nombre);
+					a.setApellido(apellido);
+					a.setDni(dni);
+				    a.setEmail(email);
+				    a.setEdad(e);
+				    ModeloAlumno model=new ModeloAlumno();
+				    if (model.insert(a)!=-1){
+				    	log.info("Alumno insertado");
+				    	msg=new Mensaje("Usuario Creado",703,TIPO_MENSAJE.INFO);
+					    request.setAttribute("msg", msg);
+					    request.setAttribute("alumno", a);
+					    
+				    }
+				    	
+				    
+				    
+				    
+				} catch (AlumnoException e1) {
+					log.error("Error al introducir el alumno");
+					msg=new Mensaje("Usuario No valido" + e1.getMensajeError(),e1.getCodigoError(),TIPO_MENSAJE.INFO);
+				    
+				    
+					
+				} catch (Exception e2) {
+					log.error("Excepcion general");
+					msg=new Mensaje("Excepcion general" + e2.getMessage(),700,TIPO_MENSAJE.INFO);
+					
+				}
+				finally{
+					request.setAttribute("msg", msg);
+					dispatcher= request.getRequestDispatcher("nuevoAlumno.jsp");
+					dispatcher.forward(request, response);	
+					
+				}
+				
 		
 	}
 
