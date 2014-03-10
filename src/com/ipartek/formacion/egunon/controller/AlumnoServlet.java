@@ -49,8 +49,7 @@ public class AlumnoServlet extends MaestroServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	@Override
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Obtener Dispatcher
 		log.trace("inicio listado/detalle usuario");
 		RequestDispatcher dispatcher;
@@ -90,13 +89,13 @@ public class AlumnoServlet extends MaestroServlet {
 	}
 
 	/**
-	 * @throws IOException, Exception
+	 * @throws IOException
+	 *             , Exception
 	 * @throws ServletException
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	@Override
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		log.trace("Inicio doPost");
 		dispatcher = null;
 		// Recoger operacion a realizar
@@ -108,8 +107,7 @@ public class AlumnoServlet extends MaestroServlet {
 		} else if (OP_BORRAR_ALUMNO.equalsIgnoreCase(op)) {
 			eliminarAlumno(request, response);
 		} else {
-			log.warn("Operacion a realizar no soportada por la aplicacion "
-					+ op);
+			log.warn("Operacion a realizar no soportada por la aplicacion " + op);
 			throw new ServletException("Operacion no soportada " + op);
 		}
 		log.trace("Fin doPost");
@@ -122,8 +120,7 @@ public class AlumnoServlet extends MaestroServlet {
 	 * @param response
 	 * @return retorna un alumno con los datos del formulario, null en caso de error
 	 */
-	private Alumno recogerDatos(HttpServletRequest request,
-			HttpServletResponse response) {
+	private Alumno recogerDatos(HttpServletRequest request, HttpServletResponse response) {
 		log.trace("Init recoger datos alumno");
 		Alumno newAlumno = null;
 		mensaje = null;
@@ -144,25 +141,19 @@ public class AlumnoServlet extends MaestroServlet {
 			newAlumno.setEdad(edad);
 			newAlumno.setEmail(email);
 		} catch (AlumnoException e) {
-			mensaje = new MsgApp("ERROR: Datos de alumno no válidos ["
-					+ e.getMensajeError() + "]", e.getCodigoError(),
-					TipoMsg.ERROR);
-			log.warn("ERROR Datos de alumno no válidos [" + e.getCodigoError()
-					+ "]");
+			mensaje = new MsgApp("ERROR: Datos de alumno no válidos [" + e.getMensajeError() + "]", e.getCodigoError(), TipoMsg.ERROR);
+			log.warn("ERROR Datos de alumno no válidos [" + e.getCodigoError() + "]");
 			newAlumno = null;
 		} catch (Exception e) {
-			mensaje = new MsgApp("ERROR: Excepcion General [" + e.getMessage()
-					+ "]", 1010, TipoMsg.ERROR);
-			log.error("Excepcion General " + e.getMessage() + " "
-					+ e.getCause() + " " + e.getLocalizedMessage());
+			mensaje = new MsgApp("ERROR: Excepcion General [" + e.getMessage() + "]", 1010, TipoMsg.ERROR);
+			log.error("Excepcion General " + e.getMessage() + " " + e.getCause() + " " + e.getLocalizedMessage());
 			newAlumno = null;
 		}
 		log.trace("Retorno de recoger datos alumno");
 		return newAlumno;
 	}
 
-	private void crearAlumno(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	private void crearAlumno(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		log.trace("Inicio insertar usuario");
 
 		Alumno nuevoAlumno;
@@ -173,24 +164,18 @@ public class AlumnoServlet extends MaestroServlet {
 					mensaje = new MsgApp("Alumno creado", 11, TipoMsg.INFO);
 					alumno = model.getAlumnoById(nuevoAlumno.getId());
 					request.setAttribute("detalleAlumno", alumno);
-					log.info("Usuario insertado con id [" + nuevoAlumno.getId()
-							+ "]");
+					log.info("Usuario insertado con id [" + nuevoAlumno.getId() + "]");
 				} else {
-					log.error("Error al insertar el alumno "
-							+ nuevoAlumno.toString());
-					mensaje = new MsgApp("No se puede insertar alumno", 11,
-							TipoMsg.ERROR);
+					log.error("Error al insertar el alumno " + nuevoAlumno.toString());
+					mensaje = new MsgApp("No se puede insertar alumno", 11, TipoMsg.ERROR);
 				}
 			} else {
 				log.error("Error al recoger datos del alumno");
-				mensaje = new MsgApp("No se puede recoger datos del alumno",
-						11, TipoMsg.ERROR);
+				mensaje = new MsgApp("No se puede recoger datos del alumno", 11, TipoMsg.ERROR);
 			}
 		} catch (Exception e) {
-			mensaje = new MsgApp("ERROR: Excepcion General [" + e.getMessage()
-					+ "]", 1010, TipoMsg.ERROR);
-			log.error("Excepcion General " + e.getMessage() + " "
-					+ e.getCause() + " " + e.getLocalizedMessage());
+			mensaje = new MsgApp("ERROR: Excepcion General [" + e.getMessage() + "]", 1010, TipoMsg.ERROR);
+			log.error("Excepcion General " + e.getMessage() + " " + e.getCause() + " " + e.getLocalizedMessage());
 		}
 		// EXCEPCION ALUMNO *----------------------------------------------------
 
@@ -200,8 +185,7 @@ public class AlumnoServlet extends MaestroServlet {
 		log.trace("Fin insertar usuario");
 	}
 
-	private void modificarAlumno(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	private void modificarAlumno(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Recoger los datos de la request
 		log.trace("Inicio modificar usuario");
 		MsgApp mensaje = null;
@@ -211,28 +195,20 @@ public class AlumnoServlet extends MaestroServlet {
 		try {
 			if ((alumnoModificar = recogerDatos(request, response)) != null) {
 				if (model.update(alumnoModificar, alumnoModificar.getId())) {
-					log.info("Usuario modificado [" + alumnoModificar.getId()
-							+ "]");
-					mensaje = new MsgApp("Alumno modificado", 1011,
-							TipoMsg.INFO);
+					log.info("Usuario modificado [" + alumnoModificar.getId() + "]");
+					mensaje = new MsgApp("Alumno modificado", 1011, TipoMsg.INFO);
 					alumno = model.getAlumnoById(alumnoModificar.getId());
 				} else {
-					log.error("Usuario no modificado ["
-							+ alumnoModificar.getId() + "] "
-							+ alumnoModificar.toString());
-					mensaje = new MsgApp(
-							"ERROR: no se ha podido modificar el alumno", 1011,
-							TipoMsg.ERROR);
+					log.error("Usuario no modificado [" + alumnoModificar.getId() + "] " + alumnoModificar.toString());
+					mensaje = new MsgApp("ERROR: no se ha podido modificar el alumno", 1011, TipoMsg.ERROR);
 				}
 			} else {
 				log.error("Error al recoger datos del alumno");
-				mensaje = new MsgApp("No se puede recoger datos del alumno",
-						11, TipoMsg.ERROR);
+				mensaje = new MsgApp("No se puede recoger datos del alumno", 11, TipoMsg.ERROR);
 			}
 			// EXCEPCION GENERAL *----------------------------------------------------
 		} catch (Exception e) {
-			mensaje = new MsgApp("ERROR: Excepcion General [" + e.getMessage()
-					+ "]", 1010, TipoMsg.ERROR);
+			mensaje = new MsgApp("ERROR: Excepcion General [" + e.getMessage() + "]", 1010, TipoMsg.ERROR);
 			log.error("Excepcion General : ");
 			StackTraceElement[] ste;
 			ste = e.getStackTrace();
@@ -248,8 +224,7 @@ public class AlumnoServlet extends MaestroServlet {
 		log.trace("Fin modificar usuario");
 	}
 
-	private void eliminarAlumno(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	private void eliminarAlumno(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Recoger los datos de la request
 		log.trace("Inicio eliminar usuario");
 		int idAlumno = Integer.parseInt(request.getParameter("id"));
@@ -262,13 +237,11 @@ public class AlumnoServlet extends MaestroServlet {
 				mensaje = new MsgApp("Alumno Eliminado", 1011, TipoMsg.INFO);
 			} else {
 				log.error("Usuario no borrado [" + idAlumno + "]");
-				mensaje = new MsgApp("No se ha podido borrar el alumno", 1011,
-						TipoMsg.ERROR);
+				mensaje = new MsgApp("No se ha podido borrar el alumno", 1011, TipoMsg.ERROR);
 			}
 			// EXCEPCION GENERAL *----------------------------------------------------
 		} catch (Exception e) {
-			mensaje = new MsgApp("ERROR: Excepcion General [" + e.getMessage()
-					+ "]", 1010, TipoMsg.ERROR);
+			mensaje = new MsgApp("ERROR: Excepcion General [" + e.getMessage() + "]", 1010, TipoMsg.ERROR);
 			StackTraceElement[] ste;
 			ste = e.getStackTrace();
 			for (int i = 0; i < ste.length; i++) {
@@ -282,8 +255,7 @@ public class AlumnoServlet extends MaestroServlet {
 	}
 
 	@Override
-	protected void service(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		session = request.getSession(true);
 
@@ -294,8 +266,7 @@ public class AlumnoServlet extends MaestroServlet {
 
 		} else {
 			// si es null forward a login.jsp
-			RequestDispatcher dispatcher = request
-					.getRequestDispatcher("login.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
 			dispatcher.forward(request, response);
 		}
 
