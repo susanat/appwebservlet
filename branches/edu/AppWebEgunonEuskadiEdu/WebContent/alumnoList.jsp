@@ -17,20 +17,22 @@
 <body>
 <h1>Listado de todos los Alumnos</h1><br/><br/>
    
-  <a href="alumnoDetalle.jsp">Crear Alumno</a>
+   
+  <%@include file="mensaje.jsp" %> 
+  <a href="nuevoAlumno.jsp">Crear Alumno</a>
    
     
 
-	<table summary="Análisis de ventas anuales" id="tabla_alumno">
-	  <caption>Cabecera o Caption</caption>
+	<table summary="Listado Alumnos" id="tabla_alumno">
+	  <caption>Listado Alumnos</caption>
 	   <thead>
 	    <tr>
 	      <th scope="col">Nombre</th>
 	      <th scope="col">Apellido</th>
 	      <th scope="col">Dni</th>
 	      <th scope="col">Edad</th>
-	      <th scope="col">Sexo</th>
 	      <th scope="col">Email</th>
+	      <th scope="col">Detalle</th>
 	      
 	    </tr>
 	  </thead>
@@ -47,7 +49,6 @@
 			    	  <td><%=a.getApellido()%></td>
 			    	  <td><%=a.getDni()%></td>
 			    	  <td><%=a.getEdad()%></td>
-			    	  <td><%=a.getSexo()%></td>
 			    	  <td><%=a.getEmail()%></td>
 			    	  
 			    	  <td><a href="alumno?id=<%=a.getId()%>">detalle</a></td>
@@ -64,8 +65,8 @@
 	  </tbody>
 	</table>
 	<script>
-		//comentari de linea
-		/*Esto e sun comentario bloque */
+		//comentario de linea
+		/*Esto es un comentario bloque */
 		$(document).ready(function(){
 		  console.debug('Esto es un mensaje debug');
 		  console.info('Esto es un mensaje info');
