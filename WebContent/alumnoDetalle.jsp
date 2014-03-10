@@ -42,8 +42,7 @@
 	
 	<%@ include file="mensaje.jsp" %>
 	
-	<form action="alumno" method="<%=method%>"
-	      onsubmit="confirmar();">
+	<form action="alumno" method="<%=method%>">
 		
 		<!--  ID  -->
 		<label name="id">ID</label>
@@ -60,7 +59,8 @@
 			<input type="submit" name="op" value="<%=AlumnoServlet.OP_NUEVO_ALUMNO%>" >
 		<% } else { %>
 			<input type="submit" name="op" value="<%=AlumnoServlet.OP_MODIFICAR_ALUMNO%>" >
-			<input type="submit" name="op" value="<%=AlumnoServlet.OP_ELIMINAR_ALUMNO%>" >				
+			<input type="submit" name="op" value="<%=AlumnoServlet.OP_ELIMINAR_ALUMNO%>" 
+				   onClick="if(!confirm('¿Seguro que deseas eliminar el registro?')){return false;}">				
 		<% } %>
 		 
 		
@@ -68,11 +68,7 @@
 	</form>
 	
 
-<script>
-function confirmar(form) {
-   return confirm('¿ Realmente quieres Elimar este usuario ? ');
-}
-</script>
+
 
 
 </body>
