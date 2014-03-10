@@ -1,0 +1,41 @@
+.fecha {
+	text-align: right;
+}
+
+#user_login {
+	text-align: right;
+	}
+
+footer {
+	text-align: left;
+}
+
+body {
+	margin: 0 auto;
+	width: 950px;
+}
+#error{
+	color:red;
+}
+#info{
+	color:blue;
+}
+#warning{
+	color:orange;
+}
+.libro, .calificacion{
+	padding-left: 30px;
+}
+.error{
+	margin-left:auto;
+	margin-right:auto;
+	width:70%;
+}
+.modificar{
+	padding-right:50px;
+	padding-left:50px;
+}
+.calificaciones{
+	text-indent: 2em;
+	padding-rigth: 300px;	
+}
