@@ -1,11 +1,11 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@page import="com.ipartek.formacion.egunon.bean.Mensaje.TIPO_MENSAJE"%>
 <%@page import="com.ipartek.formacion.egunon.bean.Mensaje"%>
 <%@page import="com.ipartek.formacion.egunon.bean.UserLogin"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8" %>
-<%@ page import="java.util.Date"%>    
+	pageEncoding="utf-8"%>
+<%@ page import="java.util.Date"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,51 +15,46 @@
 <body>
 
 
-
-	
-    <%@include file ="mensaje.jsp"%>
-	
-	<h3>Usuario: ${sessionScope.login.nombre} </h3>
-	<div id="user_login">
-	
-	
-	
-	
-		
-		<%
-			//obtener usuario logeado en session
-			UserLogin login = (UserLogin)session.getAttribute("login");
-			Mensaje msg = (Mensaje)request.getAttribute("msg");
-		    //Message msg = (Message)session.getAttribute("msg");
-		    if ( login != null ){
-		    	out.print("<span>Usuario:"+login.getNombre()+"</span><br>");
-		    	out.print("<span>Ultima visita: "+login.getAnteriorConexion()+"</span><br>");
-		    	out.print("<span>Hora conexion: "+login.getConexion()+"</span><br>");
-		    	//out.print("<span>"+msg.getMsg()+"</span><br>");
-		    	
-		    	out.print("<span><a hrep='logout'>Desconectar</span><br>");
-		    	 %>
-		    	 <form action="logout" method="post">
-		        	<input type="submit" value="logout">
-		        </form>
-		        <%
-		    }else{
-		    	msg = new Mensaje ("Bienvenido Anonimo. Logeate", 210, TIPO_MENSAJE.INFO);
-		    	out.print("<span>"+msg.getMsg()+"</span>");
-		        %>
-		        	<a href="login.jsp">Logeate</a>
-		        <% 
-		    }
-		%>
-	</div>
 	<header>
-	<nav>
-	<ol> 
-	<li><a href="egunon">Ongi Etorri</a></li>
-	<li><a href="egunon?izena=manola&abizena=gisasola">Ongi Etorri</a></li>
-	<li><a href="alumno">Alumnos</a></li>
-	</ol>
-	</nav>
+
+		<%@include file="mensaje.jsp"%>
+
+		<c:set var="hoy" value="<%=new Date()%>"></c:set>
+		<fmt:formatDate value="${hoy}" pattern="dd-MM-yyyy HH:mm" />
+
+		<h3>Usuario: ${sessionScope.login.nombre}</h3>
+		<div id="user_login">
+			<c:if test="${!empty sessionScope.login}">
+				<span>Usuario: ${sessionScope.login.nombre}</span>
+				<br>
+				<span>Ultima visita: ${sessionScope.login.anteriorConexion} </span>
+				<br>
+				<span>Hora conexión: ${sessionScope.login.conexion}</span>
+				<br>
+				<span><a href="logout">Desconectar</a></span>
+				<br>
+			</c:if>
+
+			<c:if test="${empty sessionScope.login}">
+				<a href="login.jsp">Logeate</a>
+			</c:if>
+		</div>
+
+
+
+		<nav>
+			<ol>
+				<!-- Menu publico-->
+				<li><a href="egunon">Ongi Etorri</a></li>
+				<li><a href="egunon?izena=manola&abizena=Guisasola">Ongi
+						Etorri Manola</a></li>
+
+				<!-- Menu Administracion-->
+				<c:if test="${!empty sessionScope.login}">
+					<li><a href="alumno">Alumnos</a></li>
+				</c:if>
+			</ol>
+		</nav>
 	</header>
 
 </body>

@@ -8,12 +8,12 @@
 </head>
 <body>
 <h1>Error - Lamentamos las molestias</h1>
-	<ol>
+	<ul>
 	<li><b>Causa </b><%=exception.getCause() %></li>
 	<li><b>Message </b><%=exception.getMessage() %></li>
 	
-	</ol>
-	<textarea rows="30" cols = "50"><%=exception.fillInStackTrace() %>
+	</ul>
+	<textarea rows="30" cols = "50"><%=exception.getStackTrace() %>
 	</textarea>
 	
 	
