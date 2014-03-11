@@ -5,8 +5,9 @@
     
     
 <%
-//Obtener el titulo para la jsp
+//Obtener el alumno para la jsp
   Alumno a=(Alumno)request.getAttribute("detalleAlumno");
+  String titulo=(String)request.getAttribute("title");
   
   
   
@@ -23,10 +24,10 @@
    
 
 </script>
-<title>Nuevo Alumno</title>
+<title><%=titulo%></title>
 </head>
 <body>
-  <h1>Nuevo Alumno</h1>
+  <h1><%=titulo%></h1>
   <%@include file="mensaje.jsp" %>
 
   <a href="alumno">Volver al listado</a>
@@ -39,19 +40,19 @@
     <input type="hidden" name="id_oculto" value="<%=a.getId()%>">
     
     <label name="ename">Nombre</label>
-    <input type="text" name="name" value="<%=a.getNombre()%>"><br/>
+    <input type="text" name="name" required pattern="[A-Za-z\s-'αινσϊρ]{2,}" value="<%=a.getNombre()%>"><br/>
     
     <label name="eapellido">Apellido</label>
-    <input type="text" name="apellido" value="<%=a.getApellido()%>"><br/>
+    <input type="text" name="apellido" required value="<%=a.getApellido()%>"><br/>
     
     <label name="eapellido">Dni</label>
-    <input type="text" name="dni" value="<%=a.getDni()%>"><br/>
+    <input type="text" name="dni" required value="<%=a.getDni()%>"><br/>
     
     <label name="eedad">Edad</label>
-    <input type="text" name="edad" value="<%=a.getEdad()%>"><br/>
+    <input type="text" name="edad" required value="<%=a.getEdad()%>"><br/>
     
     <label name="eemail">Email</label>
-    <input type="text" name="email" value="<%=a.getEmail()%>"><br/>
+    <input type="text" name="email" required value="<%=a.getEmail()%>"><br/>
     
     <input type="submit" name="op" value="<%=AlumnoServlet.OP_MODIFICAR_ALUMNO%>">
     <input type="submit" name="op" value="<%=AlumnoServlet.OP_BORRAR_ALUMNO%>"

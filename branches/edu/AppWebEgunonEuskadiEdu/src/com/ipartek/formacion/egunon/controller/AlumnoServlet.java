@@ -35,7 +35,7 @@ public class AlumnoServlet extends ServletMaestro {
 	public static final String OP_NUEVO_ALUMNO="nuevo";
 	public static final String OP_DETALLE_ALUMNO="detalle";
 	public static final String OP_LISTAR_ALUMNO="listar";
-	
+	private String title="";
 	
     HttpSession session;
 	/**
@@ -98,6 +98,8 @@ public class AlumnoServlet extends ServletMaestro {
 			//enviar datos en la request a la JSP
 			
 			request.setAttribute("detalleAlumno", alumno );
+			title="Detalle Alumno";
+			request.setAttribute("title",title);
 			dispatcher = request.getRequestDispatcher("alumnoDetalle.jsp");
 			
 		}else{
@@ -145,6 +147,8 @@ public class AlumnoServlet extends ServletMaestro {
 	private void borrarAlumno(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//Eliminar Alumno
 				String id=request.getParameter("id_oculto");
+				title="Listado Alumnos";
+				request.setAttribute("title",title);
 				Mensaje msg=null;
 				try {
 					
@@ -185,6 +189,8 @@ public class AlumnoServlet extends ServletMaestro {
 		String dni=request.getParameter("dni");
 		int e=Integer.parseInt(edad);
 		String email=request.getParameter("email");
+		title="Modificación Alumnos";
+		request.setAttribute("title",title);
 		Alumno a;
 		Mensaje msg=null;
 		try {
@@ -199,6 +205,7 @@ public class AlumnoServlet extends ServletMaestro {
 		    int id_oculto=Integer.parseInt(id);
 		    if (model.update(a,id_oculto)){
 		    	log.info("Alumno modificado");
+		    	a.setId(id_oculto);
 		    	msg=new Mensaje("Usuario modificado",703,TIPO_MENSAJE.INFO);
 			    request.setAttribute("msg", msg);
 			    request.setAttribute("detalleAlumno", a);
