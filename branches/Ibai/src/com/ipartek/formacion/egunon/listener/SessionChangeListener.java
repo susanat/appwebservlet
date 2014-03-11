@@ -21,6 +21,13 @@ public class SessionChangeListener implements HttpSessionAttributeListener {
      */
     public void attributeRemoved(HttpSessionBindingEvent se) {
     	System.out.println("Atributo eliminado " + se.getName());
+    	listaUsuarios = (ArrayList<UserLogin>) se.getSession().getAttribute("listaUsuarios");
+    	for (int i = 0; i< listaUsuarios.size(); i++){
+			if (listaUsuarios.get(i).getId().equals(se.getSession().getId())){
+				listaUsuarios.remove(i);
+				break;
+			}
+		}
     }
 
 	/**
