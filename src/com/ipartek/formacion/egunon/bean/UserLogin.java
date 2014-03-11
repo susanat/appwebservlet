@@ -1,5 +1,10 @@
 package com.ipartek.formacion.egunon.bean;
 
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import javax.servlet.http.HttpSession;
+
 /**
  * Usuario de logeo para la AppWeb
  * 
@@ -17,17 +22,23 @@ package com.ipartek.formacion.egunon.bean;
 public class UserLogin {
 	
 	private String nombre;
-	private String password;
-	private long anteriorConexion;
-	private long conexion;
+	private String password; //dni
+	private String id; //identificador de seso¡ion creado por el servidor
+	private int maxInactiveInterval; //tiempo de expiracion en segundos
+	private long anteriorConexion; //lastAccessedTime
+	private long conexion; //CreationTime
+	HttpSession session;
 	
-	public UserLogin(String nombre, String password) {
+	public UserLogin(String nombre, String password, HttpSession session) {
 		super();
 		this.nombre = nombre;
 		this.password = password;
 		//TODO crear tabla o usar cookie
-		this.anteriorConexion = System.currentTimeMillis();
-		this.conexion = System.currentTimeMillis();
+		this.anteriorConexion = session.getLastAccessedTime();
+		this.conexion = session.getCreationTime();
+		this.maxInactiveInterval = session.getMaxInactiveInterval();
+		this.id = session.getId();
+		this.session = session;
 	}
 
 	public String getNombre() {
@@ -61,7 +72,43 @@ public class UserLogin {
 	public void setConexion(long conexion) {
 		this.conexion = conexion;
 	}
+	
+	
+	public String getId() {
+		return id;
+	}
 
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public int getMaxInactiveInterval() {
+		return maxInactiveInterval;
+	}
+
+	public void setMaxInactiveInterval(int maxInactiveInterval) {
+		this.maxInactiveInterval = maxInactiveInterval;
+	}
+	
+	public String getAnteriorConexionString(){
+		return new Date(anteriorConexion).toString();
+	}
+	
+	public String getConexionString(){
+		return new Date(conexion).toString();
+	}
+
+	//Tiempo en segundos para que exppire la sesion del usuario
+	public long getExpireTime(){
+		return (this.maxInactiveInterval - ((new GregorianCalendar().getTimeInMillis() - this.session.getLastAccessedTime())/1000));
+	}
+
+	//Tiempo en segudnos que lleva conectado el usuario
+	public long getConnectedTime(){
+		return 0;
+	}
+
+	
 	@Override
 	public String toString() {
 		return "UserLogin [nombre=" + nombre + ", password=" + password + ", anteriorConexion=" + anteriorConexion + ", conexion=" + conexion + "]";

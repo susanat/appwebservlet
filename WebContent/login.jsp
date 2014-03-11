@@ -15,10 +15,10 @@
 		
 	<form action="login" method ="post">
 		<input type="text" name="user_login" size="20" placeholder="Nombre Usuario (minimo 6)" required
-			value="${cookie['cName'].value}" pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{5,20}$">
+			value="${cookie['cName'].value}" >
 		<br>
 		<input type="password" name="pass_login" size="20" placeholder="Password (Matus, minus ynumero)"
-			value="${cookie['cPass'].value}" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" required>
+			value="${cookie['cPass'].value}" required>
 		<br>
 		<label name="recuerdame">Recordar usuario</label>
 		<c:if test="${!empty cookie['cName'] }">
