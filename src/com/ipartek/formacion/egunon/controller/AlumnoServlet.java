@@ -18,6 +18,7 @@ import com.ipartek.formacion.egunon.bean.UserLogin;
 import com.ipartek.pruebas.bbdd.model.ModeloAlumno;
 import com.ipartek.pruebas.bean.Alumno;
 import com.ipartek.pruebas.exception.AlumnoException;
+import com.ipartek.pruebas.exception.LibroException;
 
 /**
  * Servlet implementation class AlumnoServlet
@@ -26,14 +27,17 @@ public class AlumnoServlet extends ServletMaestro {
 	private static final long serialVersionUID = 1L;
 	private final static Logger log = Logger.getLogger(AlumnoServlet.class);
 
-	private static String op; //Operacion a realizar	
+	
 	public static final String OP_NUEVO_ALUMNO = "nuevo";
 	public static final String OP_MODIFICAR_ALUMNO = "modificar";
 	public static final String OP_ELIMINAR_ALUMNO = "eliminar";
 	public static final String OP_DETALLE_ALUMNO = "detalle";
 	public static final String OP_LISTAR_ALUMNO = "listar";
 
-	private static String idAlumno; //ID Alumnoa modificar
+	//parametros de la request
+	private static String idAlumno; // ID Alumnoa modificar
+	private static String op; // Operacion a realizar
+	
 	ModeloAlumno modelAlumno;
 	HttpSession session;
 	RequestDispatcher dispatcher = null;
@@ -68,7 +72,7 @@ public class AlumnoServlet extends ServletMaestro {
 			// recoger Operacion a realizar
 			op = (String) request.getParameter("op");
 			idAlumno = (String) request.getParameter("id");
-			//realizar servicio
+			// realizar servicio
 			super.service(request, response);
 		} else {
 			// si es null forward a login.jsp
@@ -78,8 +82,6 @@ public class AlumnoServlet extends ServletMaestro {
 
 	}
 
-	
-
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -87,14 +89,13 @@ public class AlumnoServlet extends ServletMaestro {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		// obtener dispatcher
-		
-		
+
 		if (null != idAlumno) {
-			if ( !OP_ELIMINAR_ALUMNO.equalsIgnoreCase(op)){
+			if (!OP_ELIMINAR_ALUMNO.equalsIgnoreCase(op)) {
 				detalleAlumno(request, response);
-			}else{
+			} else {
 				listarAlumnos(request, response);
-			}	
+			}
 		} else {
 			listarAlumnos(request, response);
 		}
@@ -103,6 +104,29 @@ public class AlumnoServlet extends ServletMaestro {
 		dispatcher.forward(request, response);
 
 	}
+	
+	
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		log.trace("doPost");
+		if (OP_NUEVO_ALUMNO.equalsIgnoreCase(op)) {
+			crearAlumno(request, response);
+		} else if (OP_MODIFICAR_ALUMNO.equalsIgnoreCase(op)) {
+			modificarAlumno(request, response);
+		} else if (OP_ELIMINAR_ALUMNO.equalsIgnoreCase(op)) {
+			eliminarAlumno(request, response);
+		} else {
+			throw new ServletException("Operacion no soportada " + op);
+		}
+
+		log.trace("doPost - Fin ");
+	}
+	
+	
+	
 
 	private void listarAlumnos(HttpServletRequest request, HttpServletResponse response) {
 		// listando
@@ -115,8 +139,8 @@ public class AlumnoServlet extends ServletMaestro {
 		log.debug(listaAlumnos.size() + " alumnos consultados");
 
 		request.setAttribute("listaAlumnos", listaAlumnos);
-		
-		if ( OP_ELIMINAR_ALUMNO.equalsIgnoreCase(op)){
+
+		if (OP_ELIMINAR_ALUMNO.equalsIgnoreCase(op)) {
 			request.setAttribute("msg", new Mensaje("Alumno Eliminado Correctamente", 200, Mensaje.TIPO_MENSAJE.INFO));
 		}
 
@@ -137,24 +161,7 @@ public class AlumnoServlet extends ServletMaestro {
 
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		log.trace("doPost");
-		if (OP_NUEVO_ALUMNO.equalsIgnoreCase(op)) {
-			crearAlumno(request, response);
-		} else if (OP_MODIFICAR_ALUMNO.equalsIgnoreCase(op)) {
-			modificarAlumno(request, response);
-		} else if (OP_ELIMINAR_ALUMNO.equalsIgnoreCase(op)) {
-			eliminarAlumno(request, response);
-		} else {
-			throw new ServletException("Operacion no soportada " + op);
-		}
-
-		log.trace("doPost - Fin ");
-	}
+	
 
 	private void eliminarAlumno(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		log.trace("eliminarAlumno");
@@ -185,22 +192,12 @@ public class AlumnoServlet extends ServletMaestro {
 
 	private void modificarAlumno(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		log.trace("modificarAlumno");
-		Alumno a = null;
-		// TODO recoger parametros del formulario
-		String nombre = (String) request.getParameter("nombre");
-		String id = (String) request.getParameter("id");
-		// apellido
-		// dni
-		// email
-		// ......etc
-
-		// Modificar Alumno
+		Alumno a = null;		
 		try {
-			a = new Alumno();
-			a.setNombre(nombre);
+			a = recogerDatos(request, response);			
 			// Update into DDBB
-			if (!modelAlumno.update(a, Integer.parseInt(id))) {
-				log.error("No se a ha podido modificar el Alumno [" + id + "] " + a.toString());
+			if (!modelAlumno.update(a, Integer.parseInt(idAlumno))) {
+				log.error("No se a ha podido modificar el Alumno [" + idAlumno + "] " + a.toString());
 				request.setAttribute("msg", new Mensaje(
 						"No se a ha podido modificar el Alumno, por favor consulte con el Administrador de la AppWeb", 0, Mensaje.TIPO_MENSAJE.ERROR));
 			} else {
@@ -230,17 +227,9 @@ public class AlumnoServlet extends ServletMaestro {
 	private void crearAlumno(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		log.trace("crearAlumno");
 		Alumno a = null;
-		// TODO recoger parametros del formulario
-		String nombre = (String) request.getParameter("nombre");
-		// apellido
-		// dni
-		// email
-		// ......etc
-
 		// crear Alumno
 		try {
-			a = new Alumno();
-			a.setNombre(nombre);
+			a = recogerDatos(request, response);		
 			// Insert into DDBB
 			modelAlumno.insert(a);
 			log.info("Alumno insertado " + a.toString());
@@ -263,6 +252,38 @@ public class AlumnoServlet extends ServletMaestro {
 		dispatcher.forward(request, response);
 		log.trace("crearAlumno - Fin");
 
+	}
+
+	/**
+	 * Funcion que permite recoger los datos de un alumno del formulario Si se
+	 * modifica el alumno, recogemos el id, sino será un alumno nuevo
+	 * 
+	 * @param request
+	 * @param response
+	 * @return retorna un alumno con los datos del formulario
+	 * 
+	 * @throws AlumnoException
+	 * @throws LibroException 
+	 */
+	private Alumno recogerDatos(HttpServletRequest request, HttpServletResponse response) throws AlumnoException, LibroException {
+		log.trace("Init recoger datos alumno");
+		Alumno newAlumno =  new Alumno();
+		if (OP_MODIFICAR_ALUMNO.equalsIgnoreCase(op)) {
+			int idAlumno = Integer.parseInt(request.getParameter("id"));
+			newAlumno.setId(idAlumno);
+		}
+		String nombre = request.getParameter("nombre");
+		String apellido = request.getParameter("apellido");
+		String dni = request.getParameter("dni");
+		String email = request.getParameter("email");
+		int edad = Integer.parseInt(request.getParameter("edad"));
+		newAlumno.setNombre(nombre);
+		newAlumno.setApellido(apellido);
+		newAlumno.setDni(dni);
+		newAlumno.setEdad(edad);
+		newAlumno.setEmail(email);
+		log.trace("Retorno de recoger datos alumno");
+		return newAlumno;
 	}
 
 }
