@@ -17,6 +17,8 @@ import org.apache.log4j.PropertyConfigurator;
 import com.ipartek.formacion.egunon.bean.Mensaje;
 import com.ipartek.formacion.egunon.bean.UserLogin;
 import com.ipartek.pruebas.bbdd.DAOAlumno;
+import com.ipartek.pruebas.bbdd.model.ModeloAlumno;
+import com.ipartek.pruebas.bean.Alumno;
 
 /**
  * Servlet implementation class ServletLogin
@@ -71,12 +73,14 @@ public class LoginServlet extends ServletMaestro {
 		//ontenemos el dipatcher
 		RequestDispatcher dispatcher;
 		
+		ModeloAlumno modeloAlumno = new ModeloAlumno();
+		Alumno a = modeloAlumno.getAlumnoByDni(pass);
 		
 		//validamos el usuario
-		if (name.equalsIgnoreCase(USER_LOGIN)  && pass.equals(USER_PASSWORD)){
+		if (a!= null  && a.getNombre().equals(name)){
 			//SI LOGIN OK:
 			//guardar session
-			UserLogin userLogin = new UserLogin(name, pass);
+			UserLogin userLogin = new UserLogin(name, pass, session);
 			session.setAttribute("login", userLogin);
 			
 			//cargar mensaje

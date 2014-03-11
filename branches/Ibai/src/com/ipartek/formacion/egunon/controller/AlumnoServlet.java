@@ -126,7 +126,7 @@ public class AlumnoServlet extends ServletMaestro {
 		log.trace("doPost - Fin");
 	}
 
-	private void eliminarAlumno(HttpServletRequest request, HttpServletResponse response) {
+	private void eliminarAlumno(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		log.trace("Eliminar alumno");
 		int idAlumno = Integer.parseInt(request.getParameter("id"));
 
@@ -141,12 +141,8 @@ public class AlumnoServlet extends ServletMaestro {
 			log.error("Error al eliminar el alumno");
 		}
 		
-		try {
-			doGet(request, response);
-		} catch (ServletException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		// Volver a llamar a doGet
+		this.doGet(request, response);
 		//dispatcher = request.getRequestDispatcher("alumno");
 		log.trace("Fin eliminar alumno");
 	}
