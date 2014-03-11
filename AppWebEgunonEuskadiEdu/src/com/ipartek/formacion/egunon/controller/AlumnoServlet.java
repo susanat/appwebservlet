@@ -19,6 +19,7 @@ import com.ipartek.formacion.egunon.bean.UserLogin;
 import com.ipartek.pruebas.bbdd.ConnectionFactory;
 import com.ipartek.pruebas.bbdd.model.ModeloAlumno;
 import com.ipartek.pruebas.bean.Alumno;
+import com.ipartek.pruebas.bean.Calificacion;
 import com.ipartek.pruebas.exception.AlumnoException;
 import com.ipartek.pruebas.exception.LibroException;
 
@@ -83,16 +84,25 @@ public class AlumnoServlet extends ServletMaestro {
 		
 		//comprobar si es para detalle o listar		
 		String idAlumno = request.getParameter("id");
-		
+		String ac=request.getParameter("ac");
 		ModeloAlumno modelAlumno=new ModeloAlumno();
-		if ( null != idAlumno ){
+		int id=Integer.parseInt(idAlumno);
+		if(ac=="calif"){
+			//Ver calificaciones
+			log.trace("Ver calificaciones alumno" + idAlumno);
+		    ArrayList<Calificacion> calificaciones=modelAlumno.getAlumnoById(id).getCalificaciones();
+		    request.setAttribute("calificaciones", calificaciones);
+		    title="Detalle Alumno";
+			request.setAttribute("title",title);
+			dispatcher = request.getRequestDispatcher("calificacionesAlumno.jsp");
+		}else if ( null != idAlumno ){
 			//detalle
 			log.trace("Detalle alumno" + idAlumno);
 			
 			
 			//TODO conectar BBDD obtener Alumnos
 			
-			int id=Integer.parseInt(idAlumno);
+			
 			Alumno alumno=modelAlumno.getAlumnoById(id);
 			
 			//enviar datos en la request a la JSP

@@ -33,6 +33,7 @@
 	      <th scope="col">Edad</th>
 	      <th scope="col">Email</th>
 	      <th scope="col">Detalle</th>
+	      <th scope="col">Calificaciones</th>
 	      
 	    </tr>
 	  </thead>
@@ -52,6 +53,7 @@
 			    	  <td><%=a.getEmail()%></td>
 			    	  
 			    	  <td><a href="alumno?id=<%=a.getId()%>">detalle</a></td>
+			    	  <td><a href="alumno?id=<%=a.getId()%>&ac="calif">Ver Calificaciones</a></td>
 			       </tr>   
 				<%
 			
