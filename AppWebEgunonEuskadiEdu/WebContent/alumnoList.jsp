@@ -24,7 +24,7 @@
     
 
 	<table summary="Listado Alumnos" id="tabla_alumno">
-	  <caption>Listado Alumnos</caption>
+	  <caption></caption>
 	   <thead>
 	    <tr>
 	      <th scope="col">Nombre</th>

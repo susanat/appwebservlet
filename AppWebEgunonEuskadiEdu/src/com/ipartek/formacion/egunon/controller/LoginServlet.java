@@ -4,6 +4,8 @@ import java.io.IOException;
 
 
 
+
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -22,12 +24,16 @@ import javax.servlet.http.HttpSession;
 
 
 
+
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import com.ipartek.formacion.egunon.bean.Mensaje;
 import com.ipartek.formacion.egunon.bean.UserLogin;
 import com.ipartek.formacion.egunon.bean.Mensaje.TIPO_MENSAJE;
+import com.ipartek.pruebas.bbdd.model.ModeloAlumno;
+import com.ipartek.pruebas.bean.Alumno;
 
 /**
  * Servlet implementation class LoginServlet
@@ -35,8 +41,7 @@ import com.ipartek.formacion.egunon.bean.Mensaje.TIPO_MENSAJE;
 public class LoginServlet extends ServletMaestro {
 	private static final long serialVersionUID = 1L;
 
-	private static final String USER_LOGIN = "abcde";
-	private static final String USER_PASS= "Aa123456";
+	
 	private static final String COOKIE_USER_NAME= "cName";
 	private static final String COOKIE_USER_PASS= "cPass";
 	private final static Logger log=Logger.getLogger(LoginServlet.class);
@@ -86,14 +91,15 @@ public class LoginServlet extends ServletMaestro {
 		//session.invalidate();
 		
 		RequestDispatcher dispatcher; 
-		//validar usuario contra la BBDD
-		if(USER_LOGIN.equalsIgnoreCase(name)&& USER_PASS.equals(pass)){
-
-			UserLogin userLogin =new UserLogin(name,pass);
+		//validar usuario contra la BBDD(comprueba el DNI del usuario en la base de datos)
+		ModeloAlumno modelAlumno= new ModeloAlumno();
+		//alumno con dni existente en la base de datos
+		Alumno a=modelAlumno.getAlumnoByDni(pass);
+		if (name.equals(a.getNombre()))
+		{
+            UserLogin userLogin =new UserLogin(name,pass);
 			session.setAttribute("login", userLogin);
-
-
-			Mensaje msg=new Mensaje("Saludos " + name ,200,TIPO_MENSAJE.INFO);
+            Mensaje msg=new Mensaje("Saludos " + name ,200,TIPO_MENSAJE.INFO);
 			request.setAttribute("msg", msg);
 
 			//Si login ok: guardar en sesion, redirecionas al index
@@ -121,7 +127,7 @@ public class LoginServlet extends ServletMaestro {
 			response.addCookie(cPass);
             //REDIRECCIONAR AL INDEX
 			dispatcher= request.getRequestDispatcher("index.jsp");
-
+        //  
 		}else{
 			Mensaje msg=new Mensaje("Error de contraseña o usuario " + name ,200,TIPO_MENSAJE.INFO);
 			request.setAttribute("msg", msg);

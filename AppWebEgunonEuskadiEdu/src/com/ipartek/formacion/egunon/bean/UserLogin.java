@@ -16,6 +16,7 @@ package com.ipartek.formacion.egunon.bean;
 public class UserLogin {
 	private String nombre;
 	private String password;
+	
 	private long ultimaConexion;
 	private long conexion;
 	

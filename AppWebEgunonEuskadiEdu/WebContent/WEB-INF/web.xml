@@ -35,7 +35,6 @@
     <display-name>LoginServlet</display-name>
     <servlet-name>LoginServlet</servlet-name>
     <servlet-class>com.ipartek.formacion.egunon.controller.LoginServlet</servlet-class>
-    
   </servlet>
   <servlet-mapping>
     <servlet-name>LoginServlet</servlet-name>
@@ -79,7 +78,7 @@
     <display-name>ServletMaestro</display-name>
     <servlet-name>ServletMaestro</servlet-name>
     <servlet-class>com.ipartek.formacion.egunon.controller.ServletMaestro</servlet-class>
-       <init-param>
+    <init-param>
       <param-name>log4j-config</param-name>
       <param-value>WEB-INF/config/log4j.properties</param-value>
     </init-param>
@@ -89,4 +88,7 @@
     <servlet-name>ServletMaestro</servlet-name>
     <url-pattern>/ServletMaestro</url-pattern>
   </servlet-mapping>
+  <listener>
+    <listener-class>com.ipartek.formacion.egunon.listener.SessionListener</listener-class>
+  </listener>
 </web-app>
