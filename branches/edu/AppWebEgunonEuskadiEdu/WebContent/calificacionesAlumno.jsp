@@ -7,12 +7,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<!-- Incluir JQuery y data table -->
+<script src="js/jquery.js"></script>
+<script src="js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="js/css/jquery.dataTables.css">
 <title>Listado de todos las calificaciones</title>
 </head>
 <body>
    <h1>Listado de todos las calificaciones</h1><br/><br/>
    <%@include file="mensaje.jsp" %> 
-   	<table summary="Listado Alumnos" id="tabla_calificaciones">
+   	<table summary="Listado Calificaciones" id="tabla_calificaciones">
 	  <caption></caption>
 	   <thead>
 	    <tr>
@@ -30,7 +34,7 @@
 				c=lCalif.get(i);
 				%>
 				  <tr>
-			     	 <td><%=c.getCalificacion()%></td>
+			     	 <td><%=c.getCalificacion()%></td><br/>
 			    	  
 			       </tr>   
 				<%

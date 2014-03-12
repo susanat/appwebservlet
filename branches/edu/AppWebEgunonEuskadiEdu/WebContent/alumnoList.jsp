@@ -53,7 +53,7 @@
 			    	  <td><%=a.getEmail()%></td>
 			    	  
 			    	  <td><a href="alumno?id=<%=a.getId()%>">detalle</a></td>
-			    	  <td><a href="alumno?id=<%=a.getId()%>&ac="calif">Ver Calificaciones</a></td>
+			    	  <td><a href="alumno?id=<%=a.getId()%>&ac=calif">Ver Calificaciones</a></td>
 			       </tr>   
 				<%
 			

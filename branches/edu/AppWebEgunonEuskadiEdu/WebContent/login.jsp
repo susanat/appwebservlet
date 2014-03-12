@@ -29,8 +29,8 @@
 
 
 <form action="login" method="post">
-<input type="text" name="user_login" value="${cookie['cName'].value}" size="40" placeholder="Nombre de Usuario (minimo 6)" required/><br/>
-<input type="password" value="${cookie['cPass'].value}" required="required" name="pass_login" size="40" placeholder="Password de Usuario (mayus,minimo y)">
+<input type="text" name="user_login" value="${cookie['cName'].value}" size="40" placeholder="Nombre de Usuario (minimo 3)" required/><br/>
+<input type="password" value="${cookie['cPass'].value}" pattern="[0-9]{8}[a-zA-Z]" required="required" name="pass_login" size="40" placeholder="Documento de identidad DNI">
 <label name="recuerdame">Recordar usuario:</label>
 
 <c:if test="${!empty cookie['cName']}" >

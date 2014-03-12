@@ -37,6 +37,7 @@ public class AlumnoServlet extends ServletMaestro {
 	public static final String OP_DETALLE_ALUMNO="detalle";
 	public static final String OP_LISTAR_ALUMNO="listar";
 	private String title="";
+	private ArrayList<Calificacion> calificaciones;
 	
     HttpSession session;
 	/**
@@ -51,7 +52,7 @@ public class AlumnoServlet extends ServletMaestro {
 	public void init(ServletConfig config) throws ServletException {
 		
 		super.init(config);
-		
+		ArrayList<Calificacion> calificaciones=new ArrayList<Calificacion>();
 		
 		
 	}
@@ -81,22 +82,24 @@ public class AlumnoServlet extends ServletMaestro {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//obtener dispatcher
 		RequestDispatcher dispatcher = null;
-		
+		String ac=null;
 		//comprobar si es para detalle o listar		
 		String idAlumno = request.getParameter("id");
-		String ac=request.getParameter("ac");
+		ac=request.getParameter("ac");
 		ModeloAlumno modelAlumno=new ModeloAlumno();
-		int id=Integer.parseInt(idAlumno);
-		if(ac=="calif"){
+		
+		if("calif".equals(ac)){
 			//Ver calificaciones
-			log.trace("Ver calificaciones alumno" + idAlumno);
-		    ArrayList<Calificacion> calificaciones=modelAlumno.getAlumnoById(id).getCalificaciones();
+			int id=Integer.parseInt(idAlumno);
+			log.trace("Ver calificaciones alumno " + idAlumno);
+		    calificaciones=modelAlumno.getAlumnoById(id).getCalificaciones();
 		    request.setAttribute("calificaciones", calificaciones);
 		    title="Detalle Alumno";
 			request.setAttribute("title",title);
 			dispatcher = request.getRequestDispatcher("calificacionesAlumno.jsp");
 		}else if ( null != idAlumno ){
 			//detalle
+			int id=Integer.parseInt(idAlumno);
 			log.trace("Detalle alumno" + idAlumno);
 			
 			
