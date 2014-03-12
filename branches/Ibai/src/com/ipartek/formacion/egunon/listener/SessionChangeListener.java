@@ -26,17 +26,17 @@ public class SessionChangeListener implements HttpSessionAttributeListener {
      * @see HttpSessionAttributeListener#attributeRemoved(HttpSessionBindingEvent)
      */
     public void attributeRemoved(HttpSessionBindingEvent se) {
-    	log.info("Atributo eliminado " + se.getName());
+    	/*log.info("Atributo eliminado " + se.getName());
     	listaUsuarios = (HashMap) se.getSession().getAttribute("listaUsuarios");
     	listaUsuarios.remove(se.getSession().getId());
-    	se.getSession().setAttribute("listaUsuarios", listaUsuarios);
+    	se.getSession().setAttribute("listaUsuarios", listaUsuarios);*/
     }
     
 	/**
      * @see HttpSessionAttributeListener#attributeAdded(HttpSessionBindingEvent)
      */
     public void attributeAdded(HttpSessionBindingEvent se) {
-    	log.info("Atributo añadido " + se.getName());
+    	/*log.info("Atributo añadido " + se.getName());
     	if (se.getSession().getAttribute("login") != null){
     		UserLogin userLogin = (UserLogin) se.getValue();
     		System.out.println("Usuario: " + userLogin.toString());
@@ -46,7 +46,7 @@ public class SessionChangeListener implements HttpSessionAttributeListener {
     		listaUsuarios.put(se.getSession().getId(), userLogin);
     		se.getSession().setAttribute("listaUsuarios", listaUsuarios);
     		
-    	}
+    	}*/
     }
 
 	/**
