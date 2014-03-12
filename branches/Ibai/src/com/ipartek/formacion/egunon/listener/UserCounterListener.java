@@ -18,7 +18,7 @@ import com.ipartek.formacion.egunon.bean.UserLogin;
  */
 public class UserCounterListener implements ServletContextListener, HttpSessionAttributeListener {
 
-	HashMap listaUsuarios;
+	private HashMap listaUsuarios;
 	protected static final Logger log = Logger.getLogger(SessionChangeListener.class);
 	private transient ServletContext servletContext;
 	
