@@ -20,14 +20,7 @@ public class SessionListener implements HttpSessionListener {
             sessionCount++;
         }
  
-    	if(se.getSession().getAttribute("login")!=null){
-    		
-    		UserLogin ul = (UserLogin)se.getSession().getAttribute("login");
-    		System.out.println("usuario "+ul.toString());
-    		
-    	}else{
-    		System.out.println("Usuario no logeado");
-    	}
+    	
         System.out.println("Session Created: " + se.getSession().getId());
         System.out.println("Total Sessions: " + sessionCount);
         System.out.println("Tiempo de expiracion en segundos: "+se.getSession().getMaxInactiveInterval());

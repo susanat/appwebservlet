@@ -15,7 +15,7 @@
 	<form action="login" method="post">
 	
 		<input type="text" name="user_login" size="40" placeholder="Nombre Usuario (minimo 6)" required
-			  value="${cookie['cName'].value}"	pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{5,20}$">
+			  value="${cookie['cName'].value}"	pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{2,20}$">
 		<br>		
 		
 		<input type="password" name="pass_login" size="40" placeholder="Password(Mayus, minus y numero)"

@@ -1,6 +1,7 @@
 package com.ipartek.formacion.egunon.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -25,7 +26,8 @@ import com.ipartek.pruebas.log.EjemploLog;
 public class LoginServlet extends ServletMaestro {
 	private static final long serialVersionUID = 1L;
 	
-    
+	static ArrayList<UserLogin> listaUsuarios;
+	
 	private static final String USER_LOGIN =  "abcdef";
 	private static final String USER_PASSWORD = "Aa123456";
 	private static final String COOKIE_USER_NAME = "cName";
@@ -75,6 +77,7 @@ public class LoginServlet extends ServletMaestro {
 			//SI LOGIN OK:redireccionar al index
 			UserLogin userLogin = new UserLogin (name,pass);
 			session.setAttribute("login", userLogin);
+			userLogin.setId(request.getSession().getId());
 			Mensaje msg = new Mensaje("Login correcto. Ongi etorri "+name, 200 , TIPO_MENSAJE.INFO);
 			request.setAttribute("msg", msg);
 			

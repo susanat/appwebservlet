@@ -1,5 +1,8 @@
 package com.ipartek.formacion.egunon.bean;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Usuario de logeo para la appWeb
  * @author Curso
@@ -8,8 +11,8 @@ package com.ipartek.formacion.egunon.bean;
  * <ol>
  * 	<li>nombre: nombre del usuario</li>
  * 	<li>password: Pass del usuario</li>
- * 	<li>anteriorConexion: tiempo de la ultima conexion a la AppWeb en BBDD</li>
- * 	<li>conexion: tiempo de la ultima conexion a la AppWeb </li>
+ * 	<li>anteriorConexion: Tiempo de la ultima conexion del usario a la AppWeb en BBDD</li>
+ * 	<li>conexion: Tiempo de conexion actual al logearse a la AppWeb </li>
  * </ol>
  */
 public class UserLogin {
@@ -21,7 +24,16 @@ public class UserLogin {
 	
 
 	private long anteriorConexion; //lastAccessedTime
-	private long conexion;   // reationTime
+	private long conexion;   // creationTime
+	
+	public UserLogin(String nombre, String password) {
+		super();
+		this.nombre = nombre;
+		this.password = password;
+		//TODO crear tabla o usar cookie
+		this.anteriorConexion = System.currentTimeMillis();
+		this.conexion = System.currentTimeMillis();
+	}
 	
 	public String getNombre() {
 		return nombre;
@@ -71,14 +83,7 @@ public class UserLogin {
 		this.id = id;
 	}
 
-	public UserLogin(String nombre, String password) {
-		super();
-		this.nombre = nombre;
-		this.password = password;
-		//TODO crear tabla o usar cookie
-		this.anteriorConexion = System.currentTimeMillis();
-		this.conexion = System.currentTimeMillis();
-	}
+
 
 	@Override
 	public String toString() {
@@ -99,6 +104,10 @@ public class UserLogin {
 		this.conexion = conexion;
 	}
 	
+	public String getConexionString() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");		
+		return sdf.format( new Date(conexion));
+	}	
 	
 	
 }
