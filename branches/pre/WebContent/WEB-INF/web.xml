@@ -87,9 +87,7 @@
   
   
   <listener>
-    <listener-class>com.ipartek.formacion.egunon.listener.SessionListener</listener-class>
+    <listener-class>com.ipartek.formacion.egunon.listener.UserContextListener</listener-class>
   </listener>
-  <listener>
-    <listener-class>com.ipartek.formacion.egunon.listener.SessionChangeListener</listener-class>
-  </listener>
+  
 </web-app>
