@@ -33,8 +33,7 @@
 		</thead>
 		
 		<tbody>	
-			<% HashMap usuarios = (HashMap)application.getAttribute("listaUsuarios"); %>
-			<c:forEach var="usuario" items="<%=usuarios %>">
+			<c:forEach var="usuario" items="${applicationScope.listaUsuarios}">
 				<tr>
 					<td>${usuario.value.id}</td>
 					<td>${usuario.value.nombre}</td>	
