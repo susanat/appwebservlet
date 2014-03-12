@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import com.ipartek.formacion.egunon.bean.Mensaje;
 import com.ipartek.formacion.egunon.bean.Mensaje.TIPO_MENSAJE;
+import com.ipartek.formacion.egunon.listener.UserContextListener;
 
 /**
  * Servlet implementation class LogoutServlet
@@ -43,7 +44,7 @@ public class LogoutServlet extends ServletMaestro {
 		
 		//borrar usuario de session
 		HttpSession session = request.getSession();
-		session.removeAttribute("login");
+		session.removeAttribute( UserContextListener.LOGIN_KEY );
 		
 		//invalidar session
 		//session.invalidate();
