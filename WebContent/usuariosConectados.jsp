@@ -34,12 +34,12 @@
 		<tbody>	
 			<c:forEach var="usuario" items="${sessionScope.listaUsuarios}">
 				<tr>
-					<td>${usuario.id}</td>
-					<td>${usuario.nombre}</td>	
-					<td>${usuario.password}</td>	
-					<td>${usuario.conexionString}</td>	
-					<td>${usuario.expireTime}</td>	
-					<td>${usuario.anteriorConexionString}</td>	
+					<td>${usuario.value.id}</td>
+					<td>${usuario.value.nombre}</td>	
+					<td>${usuario.value.password}</td>	
+					<td>${usuario.value.conexionString}</td>	
+					<td>${usuario.value.expireTime}</td>	
+					<td>${usuario.value.anteriorConexionString}</td>	
 				</tr>
 			</c:forEach>		
 		</tbody>

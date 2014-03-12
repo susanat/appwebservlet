@@ -16,6 +16,7 @@ import org.apache.log4j.PropertyConfigurator;
 
 import com.ipartek.formacion.egunon.bean.Mensaje;
 import com.ipartek.formacion.egunon.bean.UserLogin;
+import com.ipartek.formacion.egunon.enumeration.TIPO_MENSAJE;
 import com.ipartek.pruebas.bbdd.DAOAlumno;
 import com.ipartek.pruebas.bbdd.model.ModeloAlumno;
 import com.ipartek.pruebas.bean.Alumno;
@@ -25,9 +26,7 @@ import com.ipartek.pruebas.bean.Alumno;
  */
 public class LoginServlet extends ServletMaestro {
 	private static final long serialVersionUID = 1L;
-      
-	private static final String USER_LOGIN = "abcdef";
-	private static final String USER_PASSWORD = "Aa123456";
+    private static ModeloAlumno modeloAlumno;  
 	private static final String COOKIE_USER_NAME = "cName";
 	private static final String COOKIE_USER_PASS = "cPass";
 	protected static final Logger log = Logger.getLogger(LoginServlet.class);
@@ -45,11 +44,13 @@ public class LoginServlet extends ServletMaestro {
     public void init(ServletConfig config) throws ServletException {
     	super.init(config);
     	log.trace("Init " + getServletName());
+    	modeloAlumno = new ModeloAlumno();
     }
     
     @Override
     public void destroy() {
     	super.destroy();
+    	modeloAlumno = null;
     	log.trace("Destroy " + getServletName());
     }
 
@@ -73,51 +74,56 @@ public class LoginServlet extends ServletMaestro {
 		//ontenemos el dipatcher
 		RequestDispatcher dispatcher;
 		
-		ModeloAlumno modeloAlumno = new ModeloAlumno();
-		Alumno a = modeloAlumno.getAlumnoByDni(pass);
 		
-		//validamos el usuario
-		if (a!= null  && a.getNombre().equals(name)){
-			//SI LOGIN OK:
-			//guardar session
-			UserLogin userLogin = new UserLogin(name, pass, session);
-			session.setAttribute("login", userLogin);
-			
-			//cargar mensaje
-			request.setAttribute("msg", new Mensaje(0));
-			
-			//cargar cookies
-			Cookie cName;
-			Cookie cPass;
-			if ("on".equalsIgnoreCase(request.getParameter("recuerdame"))){
-				cName = new Cookie(COOKIE_USER_NAME, userLogin.getNombre());
-				cPass = new Cookie(COOKIE_USER_PASS, userLogin.getPassword());
-				//caducan al de un día.
-				cName.setMaxAge(60*60*24);
-				cPass.setMaxAge(60*60*24);
-				log.trace("Guardadas cookies");
+		Alumno a = modeloAlumno.getAlumnoByDni(pass);
+		try{
+			//validamos el usuario
+			if (a!= null  && a.getNombre().equals(name)){
+				//SI LOGIN OK:
+				//guardar session
+				UserLogin userLogin = new UserLogin(name, pass, session);
+				session.setAttribute("login", userLogin);
+				
+				//cargar mensaje
+				request.setAttribute("msg", new Mensaje(0));
+				
+				//cargar cookies
+				Cookie cName;
+				Cookie cPass;
+				if ("on".equalsIgnoreCase(request.getParameter("recuerdame"))){
+					cName = new Cookie(COOKIE_USER_NAME, userLogin.getNombre());
+					cPass = new Cookie(COOKIE_USER_PASS, userLogin.getPassword());
+					//caducan al de un día.
+					cName.setMaxAge(60*60*24);
+					cPass.setMaxAge(60*60*24);
+					log.trace("Guardadas cookies");
+				}else{
+					cName = new Cookie(COOKIE_USER_NAME, "");
+					cPass = new Cookie(COOKIE_USER_PASS, "");
+					cName.setMaxAge(0);
+					cPass.setMaxAge(0);
+					log.trace("Borradas cookies");
+				}
+				response.addCookie(cName);
+				response.addCookie(cPass);
+				
+				
+				//redireciono a index.html
+				dispatcher = request.getRequestDispatcher("index.jsp");
 			}else{
-				cName = new Cookie(COOKIE_USER_NAME, "");
-				cPass = new Cookie(COOKIE_USER_PASS, "");
-				cName.setMaxAge(0);
-				cPass.setMaxAge(0);
-				log.trace("Borradas cookies");
+				//SI LOGIN NO OK: redireccion a login.jsp
+				log.warn("Intento fallido de login ["+name+", "+pass+"]" + request.getRemoteHost());
+				request.setAttribute("msg", new Mensaje(2));
+				dispatcher = request.getRequestDispatcher("login.jsp");
 			}
-			response.addCookie(cName);
-			response.addCookie(cPass);
-			
-			
-			//redireciono a index.html
-			dispatcher = request.getRequestDispatcher("index.jsp");
-		}else{
-			//SI LOGIN NO OK: redireccion a login.jsp
-			log.warn("Intento fallido de login ["+name+", "+pass+"]" + request.getRemoteHost());
-			request.setAttribute("msg", new Mensaje(2));
+	
+			log.trace("Forward");
+			//redirecionar a la JSP
+		}catch(Exception e){
+			log.warn("Exception sin controlar " + e.getMessage());
+			request.setAttribute("msg", new Mensaje("Ha habido un mensaje con la gestion de usuarios.", 500, TIPO_MENSAJE.ERROR));
 			dispatcher = request.getRequestDispatcher("login.jsp");
 		}
-
-		log.trace("Forward");
-		//redirecionar a la JSP
 		dispatcher.forward(request, response);
 	}
 
