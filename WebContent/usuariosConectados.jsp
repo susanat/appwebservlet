@@ -32,12 +32,12 @@
 		</thead>
 		
 		<tbody>	
-			<c:forEach var="usuario" items="${sessionScope.listaUsuarios}">
+			<c:forEach var="usuario" items="${applicationScope.listaUsuarios}">
 				<tr>
 					<td>${usuario.id}</td>
 					<td>${usuario.nombre}</td>	
 					<td>${usuario.password}</td>	
-					<td>${usuario.conexion}</td>	
+					<td>${usuario.conexionString}</td>	
 					<td>${usuario.expireTime}</td>	
 					<td>${usuario.anteriorConexion}</td>	
 				</tr>
