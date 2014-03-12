@@ -39,34 +39,36 @@
 	<a href="alumno">Volver Listado</a>
 	<br>
 
-	<form action="alumno" method="<%=method%>">
+		<form action="alumno" method="<%=method%>">
 
-		<!--  ID del alumno -->
-		<label name="id">ID</label> <input type="text" name="id_show"
-			value="<%=a.getId()%>" disabled> <input type="hidden"
-			name="id" value="<%=a.getId()%>"> <br>
+		<!--  ID  -->
+		<label name="id">ID</label> 
+		<input type="text" name="id_show"	value="<%=a.getId()%>" disabled> 
+		<input type="hidden"	name="id" value="<%=a.getId()%>"> <br>
+		<!--  Name  -->
+		<label name="nombre">Nombre</label>
+		<input type="text" name="nombre" required placeholder="nombre alumno" pattern="<%=pattern_name %>" value="<%=a.getNombre()%>"> <br>
+		<!-- APELLIDO -->
+		<label name="id">Apellido</label> 
+		<input type="text" name="apellido" required pattern="<%=pattern_name %>"
+			value="<%=a.getApellido()%>"> <br>
 
-		<!--  Nombre del alumno -->
-		<label name="nombre"><span>Nombre</span></label> <span><input
-			type="text" name="nombre" required placeholder="nombre alumno"
-			pattern="<%=pattern_name%>" value="<%=a.getNombre()%>"></span> <br>
+		<!-- DNI -->
+		<label name="id">DNI</label> 
+		<input type="text" name="dni" required pattern="[0-9]{8}[A-Z]"
+			value="<%=a.getDni()%>"> <br>
 
-		<!--  Apellido del alumno -->
-		<label name="apellido"><span>Apellido</span></label> <span><input
-			type="text" name="apellido" required pattern="<%=pattern_name%>"
-			value="<%=a.getApellido()%>"></span> <br>
+		<!-- EDAD -->
+		<label name="id">Edad</label> 
+		<!--  <input type="number" name="edad" required size="2" min="18" max="99" -->
+		 <input type="text" name="edad" required pattern="{18,99}"
+			value="<%=a.getEdad()%>"> 
+		<br>
+		<!-- EMAIL -->
+		<label name="id">Email</label> 
+		<input type="email" name="email" required
+			value="<%=a.getEmail()%>"> <br>
 
-		<!--  DNI del alumno -->
-		<label name="dni">DNI</label> <input type="text" name="dni" required
-			pattern="[0-9]{8}[A-Z]" value="<%=a.getDni()%>"> <br>
-
-		<!-- Edad del alumno -->
-		<label name="edad">Edad</label> <input type="text" name="edad"
-			required pattern="[0-9]{2}" value="<%=a.getEdad()%>"> <br>
-
-		<!-- Email del alumno -->
-		<label name="email">Email</label> <input type="text" name="email"
-			required value="<%=a.getEmail()%>"> <br>
 		<%
 			if (nuevo) {
 		%>
@@ -82,7 +84,6 @@
 		<%
 			}
 		%>
-
 
 
 

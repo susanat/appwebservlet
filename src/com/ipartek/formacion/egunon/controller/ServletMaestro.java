@@ -18,9 +18,9 @@ import com.ipartek.pruebas.bbdd.model.ModeloAlumno;
  */
 public class ServletMaestro extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	ModeloAlumno ma;
 	
-	protected final Logger log = Logger.getLogger(getClass().getName());
+	
+	public final Logger log = Logger.getLogger(getClass().getName());
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -34,13 +34,7 @@ public class ServletMaestro extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
      
     	super.init(config);
-    	ma = new ModeloAlumno();
-    	String prefix = getServletContext().getRealPath("/");
-    	String log4jpath = getInitParameter("log4j-config");
-        if (log4jpath != null)
-        {    	
-        	PropertyConfigurator.configure(prefix+log4jpath);
-        }
+    	
     	log.trace("Init "+getServletName());
     	
     }
@@ -57,6 +51,11 @@ public class ServletMaestro extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+	}
+	
+	public void destroy (ServletConfig config) throws ServletException {
+	
+		ma = null;
 	}
 
 }

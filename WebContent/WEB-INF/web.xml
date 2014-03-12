@@ -60,7 +60,7 @@
     <url-pattern>/prueba</url-pattern>
   </servlet-mapping>
   <session-config>
-    <session-timeout>1</session-timeout>
+    <session-timeout>30</session-timeout>
   </session-config>
   <servlet>
     <description>Servlet Maestro</description>
@@ -73,10 +73,23 @@
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
-  <listener>
+  <servlet>
+    <description></description>
+    <display-name>UsuariosServlet</display-name>
+    <servlet-name>UsuariosServlet</servlet-name>
+    <servlet-class>com.ipartek.formacion.egunon.controller.UsuariosServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UsuariosServlet</servlet-name>
+    <url-pattern>/usuarios</url-pattern>
+  </servlet-mapping>
+  <!-- <listener>
     <listener-class>com.ipartek.formacion.egunon.listener.SessionListener</listener-class>
-  </listener>
-  <listener>
+  </listener> -->
+  <!-- <listener>
     <listener-class>com.ipartek.formacion.egunon.listener.SessionChangeListener</listener-class>
+  </listener> -->
+   <listener>
+    <listener-class>com.ipartek.formacion.egunon.listener.UserCounterListener</listener-class>
   </listener>
 </web-app>

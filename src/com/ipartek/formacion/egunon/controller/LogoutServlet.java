@@ -47,6 +47,7 @@ public class LogoutServlet extends ServletMaestro {
 		
 		
 		HttpSession session = request.getSession();
+		session.removeAttribute("login");
 		//session.setAttribute("login", null);
 		//Invalidar session
 		session.invalidate();
