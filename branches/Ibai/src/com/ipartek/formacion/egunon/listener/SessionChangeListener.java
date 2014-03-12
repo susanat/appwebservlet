@@ -1,12 +1,16 @@
 package com.ipartek.formacion.egunon.listener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionBindingEvent;
 
+import org.apache.log4j.Logger;
+
 import com.ipartek.formacion.egunon.bean.UserLogin;
+import com.ipartek.formacion.egunon.controller.AlumnoServlet;
 
 /**
  * Application Lifecycle Listener implementation class SessionChangeListener
@@ -14,49 +18,34 @@ import com.ipartek.formacion.egunon.bean.UserLogin;
  */
 public class SessionChangeListener implements HttpSessionAttributeListener {
 
-	static ArrayList<UserLogin> listaUsuarios;
+	static HashMap listaUsuarios;
+	protected static final Logger log = Logger.getLogger(SessionChangeListener.class);
+
 
 	/**
      * @see HttpSessionAttributeListener#attributeRemoved(HttpSessionBindingEvent)
      */
     public void attributeRemoved(HttpSessionBindingEvent se) {
-    	System.out.println("Atributo eliminado " + se.getName());
-    	listaUsuarios = (ArrayList<UserLogin>) se.getSession().getAttribute("listaUsuarios");
-    	for (int i = 0; i< listaUsuarios.size(); i++){
-			if (listaUsuarios.get(i).getId().equals(se.getSession().getId())){
-				listaUsuarios.remove(i);
-				break;
-			}
-		}
+    	log.info("Atributo eliminado " + se.getName());
+    	listaUsuarios = (HashMap) se.getSession().getAttribute("listaUsuarios");
+    	listaUsuarios.remove(se.getSession().getId());
+    	se.getSession().setAttribute("listaUsuarios", listaUsuarios);
     }
-
+    
 	/**
      * @see HttpSessionAttributeListener#attributeAdded(HttpSessionBindingEvent)
      */
     public void attributeAdded(HttpSessionBindingEvent se) {
-    	System.out.println("Atributo añadido " + se.getName());
+    	log.info("Atributo añadido " + se.getName());
     	if (se.getSession().getAttribute("login") != null){
-    		UserLogin userLogin = (UserLogin) se.getSession().getAttribute("login");
+    		UserLogin userLogin = (UserLogin) se.getValue();
     		System.out.println("Usuario: " + userLogin.toString());
     		if (listaUsuarios == null){
-    			listaUsuarios = new ArrayList<UserLogin>();
+    			listaUsuarios = new HashMap();
     		}
-    		boolean insertar = true;
-    		if(se.getSession().getAttribute("listaUsuarios") != null)
-    		{
-        		listaUsuarios = (ArrayList<UserLogin>) se.getSession().getAttribute("listaUsuarios");
-        		for (int i = 0; i< listaUsuarios.size(); i++){
-        			if (listaUsuarios.get(i).getId().equals(userLogin.getId())){
-        				insertar = false;
-        			}
-        		}
-    		}
-    		if (insertar)
-    			listaUsuarios.add(userLogin);
+    		listaUsuarios.put(se.getSession().getId(), userLogin);
     		se.getSession().setAttribute("listaUsuarios", listaUsuarios);
     		
-    	}else{ 
-    		System.out.println("Usuario no logeado");
     	}
     }
 
@@ -64,7 +53,7 @@ public class SessionChangeListener implements HttpSessionAttributeListener {
      * @see HttpSessionAttributeListener#attributeReplaced(HttpSessionBindingEvent)
      */
     public void attributeReplaced(HttpSessionBindingEvent se) {
-    	System.out.println("Atributo reemplazado " + se.getName());
+    	log.info("Atributo reemplazado " + se.getName());
     }
 	
 }
