@@ -1,7 +1,6 @@
 package com.ipartek.formacion.egunon.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -13,14 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
 import com.ipartek.formacion.egunon.bean.Mensaje;
-import com.ipartek.formacion.egunon.bean.UserLogin;
 import com.ipartek.formacion.egunon.bean.Mensaje.TIPO_MENSAJE;
+import com.ipartek.formacion.egunon.bean.UserLogin;
+import com.ipartek.formacion.egunon.listener.UserContextListener;
 import com.ipartek.pruebas.bbdd.model.ModeloAlumno;
 import com.ipartek.pruebas.bean.Alumno;
-import com.ipartek.pruebas.log.EjemploLog;
 
 /**
  * Servlet implementation class LoginServlet
@@ -34,9 +32,6 @@ public class LoginServlet extends ServletMaestro {
        
 	RequestDispatcher dispatcher; 
 	
-	
-	//private static final String USER_LOGIN = "abcdef";
-	//private static final String USER_PASS  = "Aa123456";
 	private static ModeloAlumno modeloAlumno;
 	
 	private static final String COOKIE_USER_NAME = "cName";
@@ -99,7 +94,8 @@ public class LoginServlet extends ServletMaestro {
 				//guardar en session
 				UserLogin userLogin = new UserLogin(name, pass);
 				userLogin.setId( request.getSession().getId() );
-				session.setAttribute("login", userLogin );
+				
+				session.setAttribute( UserContextListener.LOGIN_KEY , userLogin );
 				
 				//Se encarga de gestionarlo el Listener
 				//listaUsuarios.add(userLogin);

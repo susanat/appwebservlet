@@ -1,4 +1,13 @@
 package com.ipartek.formacion.egunon.bean;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import com.ipartek.pruebas.enumeraciones.FechaFormat;
+import com.ipartek.pruebas.util.AlumnoUtil;
+import com.ipartek.pruebas.util.Util;
+import com.ipartek.pruebas.util.UtilFecha;
+
 /**
  * Usuario de logeo para la AppWeb
  *  
@@ -63,7 +72,10 @@ public class UserLogin {
 		return conexion;
 	}
 	
-		
+	public String getConexionString() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");		
+		return sdf.format( new Date(conexion));
+	}	
 
 	public String getId() {
 		return id;
