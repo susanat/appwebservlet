@@ -21,6 +21,7 @@
 
 	<h1>Listado de todos los Alumnos</h1>
 
+	<%@ include file="mensaje.jsp" %>
 
 	<a href="alumnoDetalle.jsp" > Crear nuevo Usuario</a>	
 	

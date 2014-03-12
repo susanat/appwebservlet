@@ -14,20 +14,25 @@ import com.ipartek.formacion.egunon.bean.UserLogin;
  */
 public class SessionChangeListener implements HttpSessionAttributeListener {
 
-	static ArrayList<UserLogin> listaUsuarios;
+	public static ArrayList<UserLogin> listaUsuarios;
 
 	/**
      * @see HttpSessionAttributeListener#attributeRemoved(HttpSessionBindingEvent)
      */
     public void attributeRemoved(HttpSessionBindingEvent se) {
     	System.out.println("Atributo eliminado " + se.getName());
-    	listaUsuarios = (ArrayList<UserLogin>) se.getSession().getAttribute("listaUsuarios");
-    	for (int i = 0; i< listaUsuarios.size(); i++){
-			if (listaUsuarios.get(i).getId().equals(se.getSession().getId())){
-				listaUsuarios.remove(i);
-				break;
-			}
-		}
+    	String idSessionUsuario = se.getSession().getId();
+    	//Comprobar que el Attributo a modificar sea "login"
+    	if (se.getSession().getAttribute("login") != null){
+    		listaUsuarios = (ArrayList<UserLogin>)se.getSession().getAttribute("listaUsuarios");
+    		for (int i = 0; i< listaUsuarios.size(); i++){
+				if (listaUsuarios.get(i).getId().equals( idSessionUsuario )){
+					listaUsuarios.remove(i);
+					se.getSession().setAttribute("listaUsuarios", listaUsuarios);   
+					break;
+				}
+    		}//end for
+    	}//end if	
     }
 
 	/**
@@ -35,28 +40,19 @@ public class SessionChangeListener implements HttpSessionAttributeListener {
      */
     public void attributeAdded(HttpSessionBindingEvent se) {
     	System.out.println("Atributo añadido " + se.getName());
+    	
+    	//Comprobar que el Attributo a modificar sea "login"
     	if (se.getSession().getAttribute("login") != null){
-    		UserLogin userLogin = (UserLogin) se.getSession().getAttribute("login");
+    		
+    		UserLogin userLogin = (UserLogin) se.getValue();
+    		
     		System.out.println("Usuario: " + userLogin.toString());
     		if (listaUsuarios == null){
     			listaUsuarios = new ArrayList<UserLogin>();
     		}
-    		boolean insertar = true;
-    		if(se.getSession().getAttribute("listaUsuarios") != null)
-    		{
-        		listaUsuarios = (ArrayList<UserLogin>) se.getSession().getAttribute("listaUsuarios");
-        		for (int i = 0; i< listaUsuarios.size(); i++){
-        			if (listaUsuarios.get(i).getId().equals(userLogin.getId())){
-        				insertar = false;
-        			}
-        		}
-    		}
-    		if (insertar)
-    			listaUsuarios.add(userLogin);
-    		se.getSession().setAttribute("listaUsuarios", listaUsuarios);
-    		
-    	}else{ 
-    		System.out.println("Usuario no logeado");
+    		//Añadismo el UserLogi a  la lista y despues la cargamos en Session
+    		listaUsuarios.add(userLogin);
+    		se.getSession().setAttribute("listaUsuarios", listaUsuarios);    		
     	}
     }
 

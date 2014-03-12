@@ -66,7 +66,7 @@
 		<!-- EDAD -->
 		<label name="id">Edad</label> 
 		<!--  <input type="number" name="edad" required size="2" min="18" max="99" -->
-		 <input type="text" name="edad" required pattern="[0-9]{2}"
+		 <input type="text" name="edad" required pattern="{18,99}"
 			value="<%=a.getEdad()%>"> 
 		<br>
 		<!-- EMAIL -->

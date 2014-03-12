@@ -17,10 +17,13 @@ package com.ipartek.formacion.egunon.bean;
  */
 public class UserLogin {
 
+	private String id; //Identificador session creado por tomcat
+	private int maxInactiveInterval; //tiempo expiracion en segundos
 	private String nombre;
-	private String password;
-	private long anteriorConexion;	
-	private long conexion;
+	private String password; //dni
+	
+	private long anteriorConexion;	// lastAccessedTime
+	private long conexion;         //  creationTime
 	
 	public UserLogin(String nombre, String password) {
 		super();
@@ -59,7 +62,39 @@ public class UserLogin {
 	public long getConexion() {
 		return conexion;
 	}
+	
+		
 
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public int getMaxInactiveInterval() {
+		return maxInactiveInterval;
+	}
+
+	public void setMaxInactiveInterval(int maxInactiveInterval) {
+		this.maxInactiveInterval = maxInactiveInterval;
+	}
+
+	public void setConexion(long conexion) {
+		this.conexion = conexion;
+	}
+
+	//Tiempo en segundos para que expire la session del usuario
+	public long getExpireTime(){
+		return 0;
+	}
+	
+	//Tiempo en segundos que lleva conectado el usuario
+	public long getConnectedTime(){
+		return 0;
+	}
+	
 	@Override
 	public String toString() {
 		return "UserLogin [nombre=" + nombre + ", password=" + password + ", anteriorConexion=" + anteriorConexion + ", conexion=" + conexion + "]";

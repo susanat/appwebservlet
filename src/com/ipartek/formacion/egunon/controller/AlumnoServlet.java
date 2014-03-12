@@ -152,7 +152,7 @@ public class AlumnoServlet extends ServletMaestro {
 		dispatcher = request.getRequestDispatcher("alumnoDetalle.jsp");
 
 		// obtener Alumnos
-		Alumno a = modelAlumno.getAlumnoById(Integer.valueOf(idAlumno));
+		Alumno a = modelAlumno.getAlumnoByDni(idAlumno);
 		// enviar datos en la request a la JSP
 		request.setAttribute("detalleAlumno", a);
 		// post method
