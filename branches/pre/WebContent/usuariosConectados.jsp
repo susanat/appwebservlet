@@ -37,9 +37,9 @@
 					<td>${usuario.id}</td>
 					<td>${usuario.nombre}</td>	
 					<td>${usuario.password}</td>	
-					<td>${usuario.conexionString}</td>	
+					<td>${usuario.conexion}</td>	
 					<td>${usuario.expireTime}</td>	
-					<td>${usuario.anteriorConexionString}</td>	
+					<td>${usuario.anteriorConexion}</td>	
 				</tr>
 			</c:forEach>		
 		</tbody>

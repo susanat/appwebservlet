@@ -1,6 +1,7 @@
 package com.ipartek.formacion.egunon.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -17,6 +18,8 @@ import org.apache.log4j.PropertyConfigurator;
 import com.ipartek.formacion.egunon.bean.Mensaje;
 import com.ipartek.formacion.egunon.bean.UserLogin;
 import com.ipartek.formacion.egunon.bean.Mensaje.TIPO_MENSAJE;
+import com.ipartek.pruebas.bbdd.model.ModeloAlumno;
+import com.ipartek.pruebas.bean.Alumno;
 import com.ipartek.pruebas.log.EjemploLog;
 
 /**
@@ -29,8 +32,12 @@ public class LoginServlet extends ServletMaestro {
 	
 	private static final long serialVersionUID = 1L;
        
-	private static final String USER_LOGIN = "abcdef";
-	private static final String USER_PASS  = "Aa123456";
+	RequestDispatcher dispatcher; 
+	
+	
+	//private static final String USER_LOGIN = "abcdef";
+	//private static final String USER_PASS  = "Aa123456";
+	private static ModeloAlumno modeloAlumno;
 	
 	private static final String COOKIE_USER_NAME = "cName";
 	private static final String COOKIE_USER_PASS = "cPass";
@@ -45,13 +52,15 @@ public class LoginServlet extends ServletMaestro {
     
     @Override
     public void init(ServletConfig config) throws ServletException {    	
-    	super.init(config);
+    	super.init(config);    	
+    	modeloAlumno = new ModeloAlumno();
     	
     }
     
     @Override
     public void destroy() {    	
     	super.destroy();
+    	modeloAlumno = null;
     	log.trace("destroy " + getServletName() );
     }
     
@@ -70,64 +79,76 @@ public class LoginServlet extends ServletMaestro {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		log.trace("dopost");
-		//recoger vatributos del formulario
-		String name = (String)request.getParameter("user_login");
-		String pass = (String)request.getParameter("pass_login");		
+		//obtener dispatcher por defecto al login
 		
-		//obtener session
-		HttpSession session = request.getSession();
-		
-		//obtener dispatcher
-		RequestDispatcher dispatcher; 
-		
-		//TODO validar usuario contra la BBDD		
-		if ( USER_LOGIN.equalsIgnoreCase(name) &&
-			 USER_PASS.equals(pass)	)
-		{
-		//SI LOGIN OK :
-			//guardar en session
-			UserLogin userLogin = new UserLogin(name, pass);
-			session.setAttribute("login", userLogin );
+		try{
+			//recoger vatributos del formulario
+			String name = (String)request.getParameter("user_login");
+			String pass = (String)request.getParameter("pass_login");		
 			
-			//cargar mensaje y pasar en la request
-			Mensaje msg =  new Mensaje("Ongi Etorri ", 200 , TIPO_MENSAJE.INFO );
-			request.setAttribute("msg", msg );
+			//obtener session
+			HttpSession session = request.getSession();	
 			
-			//CargaCookies
-			Cookie cName;
-			Cookie cPass;
-			if ( "on".equalsIgnoreCase(request.getParameter("recuerdame")) ){
-				cName = new Cookie(COOKIE_USER_NAME, userLogin.getNombre() );
-				cPass = new Cookie(COOKIE_USER_PASS, userLogin.getPassword() );
-				//caducan al de un dia
-				cName.setMaxAge( 60 * 60 * 24 );
-				cPass.setMaxAge( 60 * 60 * 24 );
-				log.trace("Guardadas cookies");
+			
+			//Buscar alumno en la BBDD
+			Alumno a = modeloAlumno.getAlumnoByDni(pass);
+			if ( a.getNombre().equals(name) &&
+				 a.getDni().equals(pass)	)
+			{
+			//SI LOGIN OK :
+				//guardar en session
+				UserLogin userLogin = new UserLogin(name, pass);
+				userLogin.setId( request.getSession().getId() );
+				session.setAttribute("login", userLogin );
+				
+				//Se encarga de gestionarlo el Listener
+				//listaUsuarios.add(userLogin);
+				//session.setAttribute("listaUsuarios", listaUsuarios);
+				
+				//cargar mensaje y pasar en la request
+				Mensaje msg =  new Mensaje("Ongi Etorri ", 200 , TIPO_MENSAJE.INFO );
+				request.setAttribute("msg", msg );
+				
+				//CargaCookies
+				Cookie cName;
+				Cookie cPass;
+				if ( "on".equalsIgnoreCase(request.getParameter("recuerdame")) ){
+					cName = new Cookie(COOKIE_USER_NAME, userLogin.getNombre() );
+					cPass = new Cookie(COOKIE_USER_PASS, userLogin.getPassword() );
+					//caducan al de un dia
+					cName.setMaxAge( 60 * 60 * 24 );
+					cPass.setMaxAge( 60 * 60 * 24 );
+					log.trace("Guardadas cookies");
+				}else{
+					//Si no quiere ser recordado borramos las Cookies
+					cName = new Cookie(COOKIE_USER_NAME, "" );
+					cPass = new Cookie(COOKIE_USER_PASS, "" );
+					cName.setMaxAge(0);
+					cPass.setMaxAge(0);
+					log.trace("Borradas cookies");
+				}
+				response.addCookie(cName);
+				response.addCookie(cPass);
+				
+				//redireccionar al index
+				dispatcher = request.getRequestDispatcher("index.jsp");
+							
 			}else{
-				//Si no quiere ser recordado borramos las Cookies
-				cName = new Cookie(COOKIE_USER_NAME, "" );
-				cPass = new Cookie(COOKIE_USER_PASS, "" );
-				cName.setMaxAge(0);
-				cPass.setMaxAge(0);
-				log.trace("Borradas cookies");
+				//SI LOGIN MAL : redireccionar al login.jsp
+				log.warn("Intento fallido de login ["+name+","+pass+"]" + request.getRemoteHost() );
+				Mensaje msg =  new Mensaje("Por favor comprueba tu usuario y pass, no los has escrito bien. ", 500 , TIPO_MENSAJE.ERROR );
+				request.setAttribute("msg", msg );			
+				dispatcher = request.getRequestDispatcher("login.jsp");				
 			}
-			response.addCookie(cName);
-			response.addCookie(cPass);
+			log.trace("foward");
+		}catch(Exception e){
+			log.error("Excepcion sin controlar " + e.getMessage() );
+			Mensaje msg =  new Mensaje("Estamos teniendo problemas con el registro de usuarios, por favor pongase en contacto con su administrador", 500 , TIPO_MENSAJE.ERROR );
+			request.setAttribute("msg", msg );		
+			//dispatcher = null;
+			dispatcher = request.getRequestDispatcher("login.jsp");		
 			
-			//redireccionar al index
-			dispatcher = request.getRequestDispatcher("index.jsp");
-			
-		
-		}else{
-			//SI LOGIN MAL : redireccionar al login.jsp
-			log.warn("Intento fallido de login ["+name+","+pass+"]" + request.getRemoteHost() );
-			Mensaje msg =  new Mensaje("Por favor comprueba tu usuario y pass, no los has escrito bien. ", 200 , TIPO_MENSAJE.ERROR );
-			request.setAttribute("msg", msg );			
-			
-			dispatcher = request.getRequestDispatcher("login.jsp");
-			
-		}
-		log.trace("foward");
+		}	
 		dispatcher.forward(request, response);		
 	}
 

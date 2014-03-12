@@ -33,7 +33,7 @@
     <description>Controlador para gestionar el logeo de usuarios</description>
     <display-name>LoginServlet</display-name>
     <servlet-name>LoginServlet</servlet-name>
-    <servlet-class>com.ipartek.formacion.egunon.controller.LoginServlet</servlet-class>    
+    <servlet-class>com.ipartek.formacion.egunon.controller.LoginServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>LoginServlet</servlet-name>
@@ -73,5 +73,23 @@
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
- 
+  
+    <servlet>
+    <description></description>
+    <display-name>UsuariosServlet</display-name>
+    <servlet-name>UsuariosServlet</servlet-name>
+    <servlet-class>com.ipartek.formacion.egunon.controller.UsuariosServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UsuariosServlet</servlet-name>
+    <url-pattern>/usuarios</url-pattern>
+  </servlet-mapping>
+  
+  
+  <listener>
+    <listener-class>com.ipartek.formacion.egunon.listener.SessionListener</listener-class>
+  </listener>
+  <listener>
+    <listener-class>com.ipartek.formacion.egunon.listener.SessionChangeListener</listener-class>
+  </listener>
 </web-app>

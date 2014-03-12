@@ -43,10 +43,10 @@ public class LogoutServlet extends ServletMaestro {
 		
 		//borrar usuario de session
 		HttpSession session = request.getSession();
-		//Sobra session.setAttribute("login", null );
+		session.removeAttribute("login");
 		
 		//invalidar session
-		session.invalidate();
+		//session.invalidate();
 		
 		//cargar mensaje y pasar en la request
 		Mensaje msg =  new Mensaje("Gracias por visitarnos, gero arte", 200 , TIPO_MENSAJE.INFO );
