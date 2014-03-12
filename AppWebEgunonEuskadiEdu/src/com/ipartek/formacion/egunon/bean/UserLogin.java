@@ -1,4 +1,8 @@
 package com.ipartek.formacion.egunon.bean;
+
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+
 /**
  * Usuario de lofeo para la Appweb
  * 
@@ -14,12 +18,18 @@ package com.ipartek.formacion.egunon.bean;
  *</ol>
  */
 public class UserLogin {
+	private String id;
+	private int maxInactiveInterval;//Tiempo expiracion en segundos
 	private String nombre;
 	private String password;
-	
-	private long ultimaConexion;
-	private long conexion;
-	
+	private long ultimaConexion; //lastAccesTime
+	private long conexion;		//creationTiem
+	private String conexionString;
+
+	public void setConexionString(String conexionString) {
+		this.conexionString = conexionString;
+	}
+
 	public UserLogin(String nombre, String password) {
 		super();
 		this.nombre = nombre;
@@ -60,6 +70,26 @@ public class UserLogin {
 	public void setConexion(long conexion) {
 		this.conexion = conexion;
 	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public int getMaxInactiveInterval() {
+		return maxInactiveInterval;
+	}
+
+	public void setMaxInactiveInterval(int maxInactiveInterval) {
+		this.maxInactiveInterval = maxInactiveInterval;
+	}
+	public  int getExpireTiem(){
+		return 0;
+	}
+	
 	
 	@Override
 	public String toString() {
@@ -67,4 +97,11 @@ public class UserLogin {
 				+ ", ultimaConexion=" + ultimaConexion + ", conexion=" + conexion
 				+ "]";
 	}
+	
+	public String getConexionString() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");		
+		return sdf.format( new Date(conexion));
+	}
+	
+	
 }

@@ -20,9 +20,7 @@
 	<header> <c:set var="hoy" value="<%=new Date() %>"></c:set> <fmt:formatDate
 		value="${hoy}" pattern="dd-MM-yyyy HH:mm" /> <%@include
 		file="mensaje.jsp"%>
-	<h3></h3>
-	<h3></h3>
-	<h3></h3>
+	</header>
 
 	<div id="user_login2">
 		<c:if test="${!empty sessionScope.login }">
@@ -47,7 +45,7 @@
 
 	</div>
 
-	<nav>
+	
 	<ol>
 		<li><a href="egunon">Ongi Etorri</a></li>
 		<li><a href="egunon?izena=Manola&abizena= Guisasola">Ongi
@@ -56,27 +54,11 @@
 		<c:if test="${!empty sessionScope.login }">
 		    <li><a href="alumno">Lista Alumno</a></li> 
 		</c:if>
+		<li><a href="usuarios">Usuarios conectados</</a></li>
 		
 	
 		
 	</ol>
-	</nav> </header>
-
 	
-
-	<%
-//Esto es un bloque de Scriptlet o codigo JAva
-out.println("<span>Esto es un Syso en JSP</span>");
-
-//for usando el out de JspWriter
-
-for(int i=1;i<=6;i++) {
-	out.println("<h"+i+">Egunon Euskadi</h"+i+">");
-}
-
-%>
-
-	<footer> </footer>
-
 </body>
 </html>
