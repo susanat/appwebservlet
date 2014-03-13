@@ -32,17 +32,32 @@ import com.ipartek.pruebas.exception.LibroException;
  */
 public class AlumnoServlet extends ServletMaestro {
 	private static final long serialVersionUID = 1L;
-	HttpSession session;
+
 	private final static Logger log = Logger.getLogger(AlumnoServlet.class);
+
+	private ModeloAlumno modelo;
+	HttpSession session;
+	private static RequestDispatcher dispatcher = null;
+
+	// Parametros de la request
+	private static String op;
+	private static String id;
+
 	private Alumno nuevoAlumno;
 	private Alumno modificadoAlumno;
-	private ModeloAlumno modelo;
 
 	public static final String OP_NUEVO_ALUMNO = "nuevo";
 	public static final String OP_MODIFICAR_ALUMNO = "modificar";
 	public static final String OP_ELIMINAR_ALUMNO = "eliminar";
 	public static final String OP_DETALLE_ALUMNO = "detalle";
 	public static final String OP_LISTAR_ALUMNO = "listar";
+
+	// Datos del alumno
+	String nombre = null;
+	String apellido = null;
+	String email = null;
+	String edad = null;
+	String dni = null;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -66,7 +81,18 @@ public class AlumnoServlet extends ServletMaestro {
 
 	@Override
 	public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		op = (String) request.getParameter("op");
+		id = request.getParameter("id");
+
+		nombre = (String) request.getParameter("nombre");
+		apellido = (String) request.getParameter("apellido");
+		email = (String) request.getParameter("email");
+		edad = (String)request.getParameter("edad");
+		dni = (String) request.getParameter("dni");
+
 		super.service(request, response);
+
 	}
 
 	/**
@@ -74,58 +100,80 @@ public class AlumnoServlet extends ServletMaestro {
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher dispatcher = null;
 
-		String id = request.getParameter("id");
 		// Lsitado de los alumnos.
-		if (id == null || OP_ELIMINAR_ALUMNO.equalsIgnoreCase(request.getParameter("op"))) {
-			log.trace("Listado Alumnos");
-			// Obtener dispatcher
-			// Se encarga de redireccionar
-			dispatcher = request.getRequestDispatcher("alumnoList.jsp");
-
-			ArrayList<Alumno> lAlumnos = modelo.getAll();
-			log.debug(lAlumnos.size() + " alumno consultados");
-			// Envíar datos en la request a la JSP
-			request.setAttribute("listaAlumnos", lAlumnos);
-
-			// Redireccionar a la jsp
-			dispatcher.forward(request, response);
+		if (id == null || OP_ELIMINAR_ALUMNO.equalsIgnoreCase(op)) {
+			listarAlumnos(request, response);
 		} else {
-			int idAlumno = Integer.parseInt(id);
-			Alumno alumno = null;
-			try {
-				alumno = new Alumno();
-			} catch (AlumnoException e) {
-
-				e.printStackTrace();
-			} catch (LibroException e) {
-
-				e.printStackTrace();
-			}
-			if (idAlumno > 0) {
-				log.trace("Detalle alumno " + id);
-				// Detalle del alumno
-				alumno = modelo.getAlumnoById(idAlumno);
-				// Se cargan los datos del detalle del alumno
-				request.setAttribute("detalleAlumno", alumno);
-
-				request.setAttribute("titulo", "Detalle alumno | Egunon Euskadi");
-				request.setAttribute("h1", "Listado del alumno " + alumno.getNombre());
-				request.setAttribute("method", "post");
-			} else {
-				// crear el atributo titulo
-				request.setAttribute("titulo", "Crear Alumno | Egunon Euskadi");
-				request.setAttribute("h1", "Crear alumno");
-				// idultimo+1
-				alumno.setId(0);
-				request.setAttribute("detalleAlumno", alumno);
-			}
-			dispatcher = request.getRequestDispatcher("alumnoDetalle.jsp");
+			datalleAlumnos(request, response);
 		}
 
 		dispatcher.forward(request, response);
 
+	}
+
+	/**
+	 * Metodo para obtener el detalle del alumno que se le pasa por id
+	 * 
+	 * @param request
+	 * @param response
+	 */
+	private void datalleAlumnos(HttpServletRequest request, HttpServletResponse response) {
+		int idAlumno = Integer.parseInt(id);
+		Alumno alumno = null;
+		try {
+			alumno = new Alumno();
+		} catch (AlumnoException e) {
+
+			e.printStackTrace();
+		} catch (LibroException e) {
+
+			e.printStackTrace();
+		}
+		if (idAlumno > 0) {
+			log.trace("Detalle alumno " + id);
+			// Detalle del alumno
+			alumno = modelo.getAlumnoById(idAlumno);
+			// Se cargan los datos del detalle del alumno
+			request.setAttribute("detalleAlumno", alumno);
+
+			request.setAttribute("titulo", "Detalle alumno | Egunon Euskadi");
+			request.setAttribute("h1", "Listado del alumno " + alumno.getNombre());
+			request.setAttribute("method", "post");
+		} else {
+			// crear el atributo titulo
+			request.setAttribute("titulo", "Crear Alumno | Egunon Euskadi");
+			request.setAttribute("h1", "Crear alumno");
+			// idultimo+1
+			alumno.setId(0);
+			request.setAttribute("detalleAlumno", alumno);
+		}
+		dispatcher = request.getRequestDispatcher("alumnoDetalle.jsp");
+
+	}
+
+	/**
+	 * Método que obtiene el listado de alumnos
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	private void listarAlumnos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		log.trace("Listado Alumnos");
+		// Obtener dispatcher
+		// Se encarga de redireccionar
+		dispatcher = request.getRequestDispatcher("alumnoList.jsp");
+
+		ArrayList<Alumno> lAlumnos = modelo.getAll();
+		log.debug(lAlumnos.size() + " alumno consultados");
+		// Envíar datos en la request a la JSP
+		request.setAttribute("listaAlumnos", lAlumnos);
+
+		// Redireccionar a la jsp
+		dispatcher.forward(request, response);
 	}
 
 	/**
@@ -135,7 +183,7 @@ public class AlumnoServlet extends ServletMaestro {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		log.trace("doPost");
 		// recoger operación a realizar
-		String op = (String) request.getParameter("op");
+		op = (String) request.getParameter("op");
 		if (OP_NUEVO_ALUMNO.equalsIgnoreCase(op)) {
 			crearAlumno(request, response);
 		} else if (OP_MODIFICAR_ALUMNO.equalsIgnoreCase(op)) {
@@ -151,6 +199,7 @@ public class AlumnoServlet extends ServletMaestro {
 
 	/**
 	 * Método para eliminar un alumno
+	 * 
 	 * @param request
 	 * @param response
 	 * @throws ServletException
@@ -161,7 +210,6 @@ public class AlumnoServlet extends ServletMaestro {
 		log.trace("Eliminar Alumno");
 		// Sólo se necesita tener el id del alumno que se desea eliminar
 		try {
-			String id = (String) request.getParameter("id");
 
 			// Crear alumno nuevoAlumno
 			boolean borrado = modelo.delete(Integer.parseInt(id));
@@ -187,9 +235,9 @@ public class AlumnoServlet extends ServletMaestro {
 		// request.setAttribute("h1", "Listado del alumno " +
 		// nuevoAlumno.getNombre());
 		// request.setAttribute("titulo", "Listado alumno | Egunon Euskadi");
-		
+
 		// Establecer el id a null para que vaya al listado de alumnos
-		
+
 		doGet(request, response);
 
 		log.trace("Eliminar Alumno - Fin");
@@ -209,30 +257,20 @@ public class AlumnoServlet extends ServletMaestro {
 		// Recoger los datos del alumno
 
 		log.trace("Modificar Alumno");
-		RequestDispatcher dispatcher = null;
-		String nombre = (String) request.getParameter("nombre");
-		String apellido = (String) request.getParameter("apellido");
-		String email = (String) request.getParameter("email");
-		int edad = (int) Integer.parseInt(request.getParameter("edad"));
-		String dni = (String) request.getParameter("dni");
-		int id = (int)Integer.parseInt(request.getParameter("id"));
+		dispatcher = null;
 
 		try {
 
-			modificadoAlumno = new Alumno();
-
-			modificadoAlumno.setNombre(nombre);
-			modificadoAlumno.setApellido(apellido);
-			modificadoAlumno.setEmail(email);
-			modificadoAlumno.setEdad(edad);
-			modificadoAlumno.setDni(dni);
+			modificadoAlumno = recogerDatosAlumno(request, response);
 			// Crear alumno nuevoAlumno
-			boolean actualizado = modelo.update(modificadoAlumno, id);
+			boolean actualizado = modelo.update(modificadoAlumno, Integer.parseInt(id));
 			if (actualizado) {
 				// Modificación OK
 				// Crear mensaje de todo correcto
 				request.setAttribute("msg", new Mensaje("Alumno modificado correctamente", "300", TIPO_MENSAJE.INFO));
 				log.trace("Alumno " + modificadoAlumno.getNombre() + " modificado correctamente");
+				// Se recupera el alumno con toda su información
+				modificadoAlumno = modelo.getAlumnoById(Integer.parseInt(id));
 				// Obtener el id del alumno insertado
 			} else {
 				// Modificación NO OK
@@ -264,7 +302,7 @@ public class AlumnoServlet extends ServletMaestro {
 
 		request.setAttribute("h1", "Detalle del alumno " + modificadoAlumno.getNombre());
 		request.setAttribute("titulo", "Detalle alumno | Egunon Euskadi");
-		modificadoAlumno.setId(id);
+		modificadoAlumno.setId(Integer.parseInt(id));
 		request.setAttribute("id", id);
 		dispatcher = request.getRequestDispatcher("alumnoDetalle.jsp");
 		log.trace("Modificar Alumno - Fin");
@@ -285,22 +323,11 @@ public class AlumnoServlet extends ServletMaestro {
 		// Recoger los datos del alumno nuevo
 
 		log.trace("Crear Alumno");
-		RequestDispatcher dispatcher = null;
-		int id = 0;
-		String nombre = (String) request.getParameter("nombre");
-		String apellido = (String) request.getParameter("apellido");
-		String email = (String) request.getParameter("email");
-		int edad = (int) Integer.parseInt(request.getParameter("edad"));
-		String dni = (String) request.getParameter("dni");
+		dispatcher = null;
 
 		try {
+			nuevoAlumno = recogerDatosAlumno(request, response);
 
-			nuevoAlumno = new Alumno();
-			nuevoAlumno.setNombre(nombre);
-			nuevoAlumno.setApellido(apellido);
-			nuevoAlumno.setEmail(email);
-			nuevoAlumno.setEdad(edad);
-			nuevoAlumno.setDni(dni);
 			// Crear alumno nuevoAlumno
 			int insertado = modelo.insert(nuevoAlumno);
 			if (insertado > 0) {
@@ -318,10 +345,16 @@ public class AlumnoServlet extends ServletMaestro {
 						TIPO_MENSAJE.ERROR));
 				log.trace("Alumno " + nuevoAlumno.getNombre() + " no se ha insertado correctamente");
 			}
+			
+			request.setAttribute("detalleAlumno", nuevoAlumno);
+
+			request.setAttribute("h1", "Detalle del alumno " + nuevoAlumno.getNombre());
+			request.setAttribute("titulo", "Detalle alumno | Egunon Euskadi");
+			
 		} catch (AlumnoException e) {
 			// Datos no son correctos
 			log.warn("Los datos introducidos para el  nuevo alumno no son correctos [" + e.getMensajeError() + "," + e.getCodigoError() + "]");
-			request.setAttribute("id", nombre);
+			request.setAttribute("id", id);
 			request.setAttribute("nombre", nombre);
 			request.setAttribute("apellido", apellido);
 			request.setAttribute("email", email);
@@ -335,17 +368,33 @@ public class AlumnoServlet extends ServletMaestro {
 			log.warn("Excepción general " + e.getMessage());
 			request.setAttribute("msg", new Mensaje("Excepción general", "0", TIPO_MENSAJE.WARNING));
 		}
-
-		request.setAttribute("detalleAlumno", nuevoAlumno);
-
-		request.setAttribute("h1", "Detalle del alumno " + nuevoAlumno.getNombre());
-		request.setAttribute("titulo", "Detalle alumno | Egunon Euskadi");
+		
 
 		request.setAttribute("id", id);
 		dispatcher = request.getRequestDispatcher("alumnoDetalle.jsp");
 
 		log.trace("Crear Alumno - Fin");
 		dispatcher.forward(request, response);
+	}
+
+	/**
+	 * Metodo para recoger os datos del formulario para un tipo alumno
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws AlumnoException
+	 * @throws LibroException
+	 */
+	private Alumno recogerDatosAlumno(HttpServletRequest request, HttpServletResponse response) throws AlumnoException, LibroException {
+
+		nuevoAlumno = new Alumno();
+		nuevoAlumno.setNombre(nombre);
+		nuevoAlumno.setApellido(apellido);
+		nuevoAlumno.setEmail(email);
+		nuevoAlumno.setEdad(Integer.parseInt(edad));
+		nuevoAlumno.setDni(dni);
+
+		return nuevoAlumno;
 	}
 
 }

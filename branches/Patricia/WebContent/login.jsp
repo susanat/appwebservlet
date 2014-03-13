@@ -29,12 +29,13 @@
 	<h1>Login AppWeb Egunon Euskadi</h1>
 		<div id="logerse">
 			<form method="POST" action="login">
-				<input type="text" name="user_login" size="40"  placeholder="Nombre Usuario (minimo 6)" 
-					value="${cookie['cName'].value}"  pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{5,20}$" required />
+				<input type="text" name="user_login" size="40"  placeholder="Nombre Usuario (minimo 5)" 
+					value="${cookie['cName'].value}"  pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{4,20}$" required />
 				<br>
 				
-				<input type="password" name="pass_login" size="40" placeholder="Password Usuario(Mayus, minus y numero)" 
-				pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" required value="${cookie['cPass'].value}" />
+				<!--  <input type="password" name="pass_login" size="40" placeholder="Password Usuario(Mayus, minus y numero)" 
+				pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" required value="${cookie['cPass'].value}" />-->
+				<input type="password" name="pass_login" size="40" placeholder="Documento de Identidad D.N.I." required pattern="[0-9]{8}[a-zA-Z]" value="${cookie['cPass'].value}" />
 				
 				<br>
 				

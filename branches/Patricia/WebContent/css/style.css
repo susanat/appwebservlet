@@ -36,6 +36,6 @@ body {
 	padding-left:50px;
 }
 .calificaciones{
-	text-indent: 2em;
-	padding-rigth: 300px;	
+	padding-rigth: 300px;
+	float: left;	
 }
