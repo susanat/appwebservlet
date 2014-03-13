@@ -74,7 +74,7 @@
     <display-name>LoginServlet</display-name>
     <servlet-name>LoginServlet</servlet-name>
     <servlet-class>com.ipartek.formacion.egunon.controller.LoginServlet</servlet-class>
-    </servlet>
+  </servlet>
   <servlet-mapping>
     <servlet-name>LoginServlet</servlet-name>
     <url-pattern>/login</url-pattern>
@@ -104,19 +104,37 @@
     <display-name>ServletMaestro</display-name>
     <servlet-name>ServletMaestro</servlet-name>
     <servlet-class>com.ipartek.formacion.egunon.controller.ServletMaestro</servlet-class>
-      <init-param>
+    <init-param>
       <description></description>
       <param-name>lo4j-config</param-name>
       <param-value>WEB-INF/config/log4j.properties</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
-   </servlet>
+  </servlet>
   <servlet-mapping>
     <servlet-name>ServletMaestro</servlet-name>
     <url-pattern>/servletMaestro</url-pattern>
   </servlet-mapping>
-  
   <session-config>
     <session-timeout>30</session-timeout>
   </session-config>
+  <listener>
+    <listener-class>com.ipartek.formacion.egunon.listener.SessionListener</listener-class>
+  </listener>
+ <!--  <listener>
+    <listener-class>com.ipartek.formacion.egunon.listener.SessionChangeListener</listener-class>
+  </listener> -->
+  <servlet>
+    <description></description>
+    <display-name>SessionServlet</display-name>
+    <servlet-name>SessionServlet</servlet-name>
+    <servlet-class>com.ipartek.formacion.egunon.controller.SessionServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SessionServlet</servlet-name>
+    <url-pattern>/session</url-pattern>
+  </servlet-mapping>
+  <listener>
+    <listener-class>com.ipartek.formacion.egunon.listener.UserContextListener</listener-class>
+  </listener>
 </web-app>

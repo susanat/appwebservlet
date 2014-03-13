@@ -48,8 +48,9 @@ if(title==null) {
 	<%@include file="mensaje.jsp"%>
 
 	<form method="<%=method%>" action="alumno">
-		<!-- ID -->
+		<h3>Datos del alumno</h3>
 	<div id="alumno">
+		<!-- ID -->
 		<label for="id">ID</label> <input class="modificar" type="text"
 			name="id_show" disabled
 			value="<%=(alumno != null) ? alumno.getId() : request.getAttribute("id")%>" />
@@ -58,26 +59,32 @@ if(title==null) {
 		<input type="hidden" name="id"
 			value="<%=(alumno != null) ? alumno.getId() : request.getAttribute("id")%>" />
 		<br>
+		<%  final String patternName= "[A-Za-z\\s-'áéíóúñ]{2,}"; %>
+		
 		<!-- Nombre -->
-		<label for="id">Nombre</label> <input class="modificar" type="text"
-			name="nombre"
-			value="<%=(alumno != null) ? alumno.getNombre() : request.getAttribute("nombre")%>" />
-		<br> <label for="apellido">Apellido</label> <input
-			class="modificar" type="text" name="apellido"
-			value="<%=(alumno != null) ? alumno.getApellido() : request.getAttribute("apellido")%>" />
+		<label for="id">Nombre</label> <input class="modificar"  type="text" 
+			name="nombre" required placeholder="nombre" required
+			value="<%=(alumno != null && alumno.getNombre()!=null) ? alumno.getNombre() : request.getAttribute("nombre")%>" pattern="<%=patternName %>" />
+		<br> <label for="apellido">Apellido</label> <input 
+			class="modificar"  type="text" name="apellido" required pattern="<%=patternName %>"
+			value="<%=(alumno != null && alumno.getApellido()!=null) ? alumno.getApellido() : request.getAttribute("apellido")%>" />
 		<br> <label for="dni">DNI</label> <input class="modificar"
-			type="text" name="dni"
-			value="<%=(alumno != null) ? alumno.getDni() : request.getAttribute("dni")%>" />
+			type="text" required name="dni" pattern="[0-9]{8}[A-Z]"
+			value="<%=(alumno != null && alumno.getDni()!=null) ? alumno.getDni() : request.getAttribute("dni")%>" />
 		<br> <label for="email">Email</label> <input class="modificar"
-			type="text" name="email"
-			value="<%=(alumno != null) ? alumno.getEmail() : request.getAttribute("email")%>" />
-		<br> <label for="edad">Edad</label> <input class="modificar"
-			type="text" name="edad"
-			value="<%=(alumno != null) ? alumno.getEdad() : request.getAttribute("edad")%>" />
+			type="text" name="email" required
+			value="<%=(alumno != null && alumno.getEmail()!=null) ? alumno.getEmail() : request.getAttribute("email")%>" />
+		<br> <label for="edad">Edad</label> 
+		<!--  <input class="modificar" type="number" name="edad" required size="2" min="18" max="99"
+			value="<%=(alumno != null && alumno.getEdad()!=0) ? alumno.getEdad() : request.getAttribute("edad")%>" />-->
+			
+			<input class="modificar" type="text" name="edad" required pattern="[0-9]{2}"
+			value="<%=(alumno != null && alumno.getEdad()!=0) ? alumno.getEdad() : request.getAttribute("edad")%>" />
+			
 		<br>
 		</div>
-		<%if(alumno.getCalificaciones()!=null){ %>
-			<h3>Calificaciones:</h3>
+		<%if( !nuevo && alumno.getCalificaciones()!=null && alumno.getCalificaciones().size()>0){ %>
+			<h3>Calificaciones</h3>
 		<div class="calificaciones">
 			<%for(Calificacion c: alumno.getCalificaciones() ){ %>
 				<label for="id_cal">Id Calificación</label>
@@ -99,7 +106,7 @@ if(title==null) {
 		</div>
 		<%} %>
 	<br>
-
+	<br>
 		<%
 			if (nuevo) {
 		%>

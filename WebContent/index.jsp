@@ -74,7 +74,9 @@
 				<!-- Menú Administración -->
 				<c:if test="${!empty sessionScope.login}" >
 					<li><a href="alumno">Alumnos </a></li>
+					<li><a href="session">Usuarios Conectados</a></li>
 				</c:if>
+				
 			</ol>
 		</nav>
 	</header>
