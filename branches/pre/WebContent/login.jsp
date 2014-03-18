@@ -43,7 +43,17 @@
 			    value="${cookie['cPass'].value}"	pattern="[0-9]{8}[a-zA-Z]" required >
 		<br>		
 		
+		<select name="language">
+			<option value="eu_ES">Euskara</option>
+			<option value="es_ES">Castellano</option>
+			<option value="en_EN">Ingles</option>
+		</select>
+		<br>
+		<br>
+		<br>
+		
 		<label name="recuerdame">Recordar usuario</label>
+		<br>
 		
 		<c:if test="${!empty cookie['cName']}">		
 			<input type="checkbox" name="recuerdame" checked >
