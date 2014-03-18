@@ -79,10 +79,13 @@ public class LoginServlet extends ServletMaestro {
 		try{
 			//recoger vatributos del formulario
 			String name = (String)request.getParameter("user_login");
-			String pass = (String)request.getParameter("pass_login");		
+			String pass = (String)request.getParameter("pass_login");
+			String language = (String)request.getParameter("language");		
 			
 			//obtener session
 			HttpSession session = request.getSession();	
+			//guardar idioma en session
+			session.setAttribute("language", language);
 			
 			
 			//Buscar alumno en la BBDD

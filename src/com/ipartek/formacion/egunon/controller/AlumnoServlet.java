@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import com.google.protobuf.Message;
 import com.ipartek.formacion.egunon.bean.Mensaje;
 import com.ipartek.formacion.egunon.bean.UserLogin;
 import com.ipartek.pruebas.bbdd.model.ModeloAlumno;
@@ -174,7 +175,13 @@ public class AlumnoServlet extends ServletMaestro {
 						0, Mensaje.TIPO_MENSAJE.ERROR));
 			} else {
 				log.info("Alumno Eliminado [" + id + "]");
-				request.setAttribute("msg", new Mensaje("Alumno Eliminado Correctamente", 200, Mensaje.TIPO_MENSAJE.INFO));
+				
+				//request.setAttribute("msg", new Mensaje("Alumno Eliminado Correctamente", 200, Mensaje.TIPO_MENSAJE.INFO));
+				
+				request.setAttribute("msg", new Mensaje(messages.getString("alumno.eliminado"), 200, Mensaje.TIPO_MENSAJE.INFO));
+				
+				
+				
 			}
 		} catch (Exception e) {
 			log.warn("Excepcion general " + e.getMessage());

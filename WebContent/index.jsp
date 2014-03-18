@@ -5,15 +5,19 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
     
-  
+
+<c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+<fmt:setLocale value="${language}" />
+<fmt:setBundle basename="com.ipartek.formacion.egunon.controller.i18nmessages" />  
     
 <!DOCTYPE>
-<html>
+<html lang="${language}">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Home | Egun on Euskadi</title>
 </head>
 <body>
+	
 	
 	
 	<header>
@@ -43,13 +47,13 @@
 		<nav>
 			<ol>
 				<!-- Menu publico--> 
-				<li><a href="egunon">Ongi Etorri</a></li>
-				<li><a href="egunon?izena=manola&abizena=Guisasola">Ongi Etorri Manola</a></li>
+				<li><a href="egunon"><fmt:message key="navmenu.op1" /></a></li>
+				<li><a href="egunon?izena=manola&abizena=Guisasola"><fmt:message key="navmenu.op2" /></a></li>
 				
 				<!-- Menu Administracion-->
 				<c:if test="${!empty sessionScope.login}">
-					<li><a href="alumno">Alumnos</a></li>
-					<li><a href="usuarios">Usuarios Conectados</a></li>
+					<li><a href="alumno"><fmt:message key="navmenu.op3" /></a></li>
+					<li><a href="usuarios"><fmt:message key="navmenu.op4" /></a></li>
 				</c:if>	
 			</ol>
 		</nav>
